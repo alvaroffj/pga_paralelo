@@ -30,7 +30,7 @@
 
 #include <stdio.h>
 #include <sys/times.h>
-#include <mpi.h>
+//#include <mpi.h>
 
 /* file pointers */
 FILE *outfp, *infp, *evofp, *rprofp, *ralgfp;
