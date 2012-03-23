@@ -8,7 +8,7 @@ main.o: main.c sga.h
 random.o: random.c random.h
 	$(CC) -c $(MPI_COMPILE_FLAGS) random.c $(MPI_LINK_FLAGS) -o random.o
 generate.o: generate.c generate.h
-	$(CC) -c $(MPI_COMPILE_FLAGS)  generate.c $(MPI_LINK_FLAGS) -o generate.o
+	$(CC) -c $(MPI_COMPILE_FLAGS) generate.c $(MPI_LINK_FLAGS) -o generate.o
 operators.o: operators.c operators.h
 	$(CC) -c $(MPI_COMPILE_FLAGS) operators.c $(MPI_LINK_FLAGS) -o operators.o
 rselect.o: rselect.c rselect.h
@@ -34,3 +34,22 @@ app2_g.o: app_g.c app_g.h
 app2_ir.o: app_sp.c app_sp.h
 	$(CC) -c $(MPI_COMPILE_FLAGS) app_sp.c $(MPI_LINK_FLAGS) -o app_sp.o
 
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread main.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o main.o
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread generate.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o generate.o
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread memory.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o memory.o
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread statistic.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o statistic.o
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread utility.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o utility.o
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread initial.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o initial.o
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread app.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o app.o
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread app2.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o app2.o
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread random.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o random.o
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread master.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o master.o
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread comunica.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o comunica.o
+comunica.c: In function âlee_char_y_genera_achivo_instancia_tmpâ:
+comunica.c:610: warning: incompatible implicit declaration of built-in function âmallocâ
+comunica.c:660: warning: incompatible implicit declaration of built-in function âfreeâ
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread rselect.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o rselect.o
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread operators.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o operators.o
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread app_g.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o app_g.o
+'gcc' -c -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread app_sp.c -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -o app_sp.o
+'gcc' -I/usr/lib/openmpi/include -I/usr/lib/openmpi/include/openmpi -pthread main.o generate.o memory.o statistic.o utility.o initial.o app.o app2.o random.o master.o comunica.o rselect.o operators.o app_g.o app_sp.o -pthread -L/usr/lib/openmpi/lib -lmpi -lopen-rte -lopen-pal -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl -lm -o main
