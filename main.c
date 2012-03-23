@@ -259,20 +259,18 @@ int main(int argc,char *argv[])
                		MPI_Type_free(&message_type_send);
                		MPI_Type_free(&message_type_receive);
             
-            	}//End if
-            	else
-               		printf("!!! ADVERTENCIA ¡¡¡ Rank %d no procesó archivo de instancia ya que hubo problemas al leer enteros, generar o leer tmp...\n", rank);
-         	}//End if
-         	else 
-            	printf("!!! ADVERTENCIA ¡¡¡ Rank %d no procesó archivo de instancia ya que Rank 0 tuvo problemas al leerlo...\n", rank);
+            	} else
+                    printf("!!! ADVERTENCIA ¡¡¡ Rank %d no procesó archivo de instancia ya que hubo problemas al leer enteros, generar o leer tmp...\n", rank);
+         	} else 
+                    printf("!!! ADVERTENCIA ¡¡¡ Rank %d no procesó archivo de instancia ya que Rank 0 tuvo problemas al leerlo...\n", rank);
         	
 	      	// Libera variables del problema  
 	      	app_free(tipo_problema);
 
 	        //Mensaje de término de procesamiento de archivo actual se envía a Rank = 0
 	        MPI_Isend(&time_comm, 1, MPI_DOUBLE, nodo0, MSJ_TERMINO, MPI_COMM_WORLD, &request);
-	   		for(;;){
-	         	MPI_Test(&request, &flag2, &status);
+                for(;;){
+                    MPI_Test(&request, &flag2, &status);
 	            if(flag2 == true){
 	               	#ifdef _PRINT_MIGRACION_
 	                	printf("Envió desde Rank = %d a Rank = 0 Mensaje de Término, archivo %s...\n", rank, nomarch);

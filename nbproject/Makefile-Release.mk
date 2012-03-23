@@ -45,8 +45,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/comunica.o \
 	${OBJECTDIR}/generate.o \
 	${OBJECTDIR}/statistic.o \
-	${OBJECTDIR}/app.o \
 	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/app.o \
 	${OBJECTDIR}/operators.o \
 	${OBJECTDIR}/random.o
 
@@ -130,15 +130,15 @@ ${OBJECTDIR}/statistic.o: statistic.c
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/statistic.o statistic.c
 
-${OBJECTDIR}/app.o: app.c 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/app.o app.c
-
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
+
+${OBJECTDIR}/app.o: app.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/app.o app.c
 
 ${OBJECTDIR}/operators.o: operators.c 
 	${MKDIR} -p ${OBJECTDIR}

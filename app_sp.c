@@ -202,6 +202,7 @@ int app_leearchivo_sp(char *nombrearchivo, int rank_actual) {
         //Cierra archivo de piezas
         fclose(fp);
         largo_cromosoma = numero_piezas + bit_reservados;
+        fitness_inicial = (float) area_total*10;
         return -1;
     } else return 0;
 }

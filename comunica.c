@@ -196,12 +196,12 @@ void comunicacion_asincrona_con_cada_rank(void)
             	if (LISTO_PARA_MIGRAR_TODOS_LOS_RANK == 0)	LISTO_PARA_MIGRAR_TODOS_LOS_RANK = 1;
          	} else if (status.MPI_TAG == MSJ_TERMINO){
 	            MPI_Recv(&time_comm_rank, 1, MPI_DOUBLE, nodox, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-            	time_comm += time_comm_rank;
-            	flag1 = 0;
-            	#ifdef _PRINT_MIGRACION_
-               		printf("Rank = 0 Recibió desde Rank = %d Mensaje de Término (Tiempo Comm = %f), Rank = 0 confirmaró término...\n", nodox, time_comm_rank);
-            	#endif
-            	LISTO_PARA_TERMINAR --;
+                    time_comm += time_comm_rank;
+                    flag1 = 0;
+                    #ifdef _PRINT_MIGRACION_
+                            printf("Rank = 0 Recibió desde Rank = %d Mensaje de Término (Tiempo Comm = %f), Rank = 0 confirmaró término...\n", nodox, time_comm_rank);
+                    #endif
+                    LISTO_PARA_TERMINAR --;
          	}//End else if
       	}//End if
       	if(LISTO_PARA_COMENZAR == 0){
