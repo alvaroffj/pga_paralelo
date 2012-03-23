@@ -232,7 +232,7 @@ int main(int argc,char *argv[])
 	               
     	           	for(gen=0; gen<maxgen; gen++) {
         	         	if(printstrings == 1) fprintf(outfp,"\nGENERATION %d->%d\n",gen,maxgen);
-      
+                                printf("generacion: %d de %d => %f\n",gen, maxgen, bestfit.fitness);
                   		// Crea una nueva generación
                   		generation(tipo_problema);
       
