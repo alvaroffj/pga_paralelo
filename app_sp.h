@@ -7,7 +7,7 @@
 
 #include "var_pcp.h"
 
-int      app_leearchivo_sp(char *nombrearchivo);
+int      app_leearchivo_sp(char *nombrearchivo, int rank_actual);
 void 	 app_free_sp(void);
 void     app_objfunc_sp(struct individual *critter);
 void 	 app_genera_resultados_problema_sp(int corrida, int tipo_problema, char *nombrearchivo);

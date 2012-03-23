@@ -10,7 +10,7 @@
 void     app_liberamemlistaperdidas_g(int perdidaexterna);
 void     app_agregalistap_g(int anc,int alt);
 void     app_ordena_piezas_problema_g(void);
-int      app_leearchivo_g(char *nombrearchivo);
+int      app_leearchivo_g(char *nombrearchivo, int rank_actual);
 void 	 app_free_g(void);
 TEval    app_funceval_g(TNodoAP *piezas);
 void     app_objfunc_g(struct individual *critter);
