@@ -406,7 +406,7 @@ int almacena_archivo_instancia(char *nombrearchivo)
 	//Válido sólo para RANK=0 (Coordinador) 
 	sprintf(nombre_archivo, "%s%s", ruta_instancias, nombrearchivo);
    	if((fp = fopen(nombre_archivo,"r"))== NULL){
-		fprintf(outfp,"error al leer archivo %s\n",nombre_archivo);
+		fprintf(outfp,"error al leer archivo1 %s\n",nombre_archivo);
 		return 0;
    	}//End if
 	//Se posiciona al final del archivo de instancia
@@ -417,7 +417,7 @@ int almacena_archivo_instancia(char *nombrearchivo)
 	cantidad_char_que_determinan_instancia_del_problema = ftell(fp); 
 	if(cantidad_char_que_determinan_instancia_del_problema <= 0){
 		fclose(fp);
-		fprintf(outfp,"error al leer archivo %s\n",nombre_archivo);
+		fprintf(outfp,"error al leer archivo2 %s\n",nombre_archivo);
 		return 0;
    	}//End if
 
