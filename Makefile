@@ -11,8 +11,6 @@ generate.o: generate.c generate.h
 	$(CC) -c $(MPI_COMPILE_FLAGS)  generate.c $(MPI_LINK_FLAGS) -o generate.o
 operators.o: operators.c operators.h
 	$(CC) -c $(MPI_COMPILE_FLAGS) operators.c $(MPI_LINK_FLAGS) -o operators.o
-app.o: app.c app.h
-	$(CC) -c $(MPI_COMPILE_FLAGS) app.c $(MPI_LINK_FLAGS) -o app.o
 rselect.o: rselect.c rselect.h
 	$(CC) -c $(MPI_COMPILE_FLAGS) rselect.c $(MPI_LINK_FLAGS) -o rselect.o
 memory.o: memory.c memory.h
@@ -29,6 +27,8 @@ master.o: master.c master.h
 	$(CC) -c $(MPI_COMPILE_FLAGS) master.c $(MPI_LINK_FLAGS) -o master.o
 comunica.o: comunica.c comunica.h
 	$(CC) -c $(MPI_COMPILE_FLAGS) comunica.c $(MPI_LINK_FLAGS) -o comunica.o
+app.o: app.c app.h
+	$(CC) -c $(MPI_COMPILE_FLAGS) app.c $(MPI_LINK_FLAGS) -o app.o
 app2_g.o: app_g.c app_g.h
 	$(CC) -c $(MPI_COMPILE_FLAGS) app_g.c $(MPI_LINK_FLAGS) -o app_g.o
 app2_ir.o: app_sp.c app_sp.h
