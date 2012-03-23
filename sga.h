@@ -6,7 +6,7 @@
 #define BITS_PER_BYTE 8            /* number of bits per byte on this machine */
 #define UINTSIZE (BITS_PER_BYTE*sizeof(unsigned))    /* # of bits in unsigned */
 //#define _DEBUG_MALLOC_ /* SI DEF => MUESTRA MENSAJES MALLOC Y FREE          */
-//#define _PRINT_MIGRACION_/* SI DEF => MUESTRA MENSAJES DE MIGRACION EN RANK 0 */
+#define _PRINT_MIGRACION_/* SI DEF => MUESTRA MENSAJES DE MIGRACION EN RANK 0 */
 
 #define MSJ_DATOS                      10
 #define MSJ_TERMINO                    11
