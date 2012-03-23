@@ -100,57 +100,57 @@ int consistenciaarchivo(int workers)
 int inicializa_archivos(int argc,char *argv[], int rank)
 //Inicializa archivos globales
 {
-   	//Asigna ruta de instancias y resultados
-  	sprintf(ruta_instancias,"%s", "instancias/"); //Ruta donde se encuentras las instancias a resolver
-  	sprintf(ruta_resultados,"%s", "resultados/"); //Ruta donde se dejarán los archivos de resultados
+    //Asigna ruta de instancias y resultados
+    sprintf(ruta_instancias,"%s", "instancias/"); //Ruta donde se encuentras las instancias a resolver
+    sprintf(ruta_resultados,"%s", "resultados/"); //Ruta donde se dejarán los archivos de resultados
 
-	if(rank == 0) {
-	   	//Determina input desde argumentos de la función main()
-	   	numfiles = argc - 1;
-	   	switch(numfiles) {
-	      	case 2:
-            	if((infp = fopen(argv[1],"r")) == NULL) { /* abre archivo de entrada in.txt */
-               		fprintf(stderr,"!!! Error, no puede abrir archivo de entrada %s \n",argv[1]);
-               		return -1;
-	            }//End if 
-	         	sprintf(arch_salida,"%s%s",ruta_resultados, argv[2]); //Ruta del archivo de salida (layout)
-	  	        if((outfp = fopen(arch_salida,"w")) == NULL) {
-	               fprintf(stderr,"!!! Error, no puede abrir archivo de salida %s \n",arch_salida);
-	               return -1;
-	            }
-	         	break;
-	      	default:
-	         	fprintf(stderr,"Uso: mpirun -v -c [AG+Coord] [input file] [output file]\n");
-	         	return -1;
-	   	}//End switch
+    if(rank == 0) {
+        //Determina input desde argumentos de la función main()
+        numfiles = argc - 1;
+        switch(numfiles) {
+            case 2:
+                if((infp = fopen(argv[1],"r")) == NULL) { /* abre archivo de entrada in.txt */
+                    fprintf(stderr,"!!! Error, no puede abrir archivo de entrada %s \n",argv[1]);
+                    return -1;
+                }
+                sprintf(arch_salida,"%s%s",ruta_resultados, argv[2]); //Ruta del archivo de salida (layout)
+                if((outfp = fopen(arch_salida,"w")) == NULL) {
+                    fprintf(stderr,"!!! Error, no puede abrir archivo de salida %s \n",arch_salida);
+                    return -1;
+                }
+                break;
+            default:
+                fprintf(stderr,"Uso: mpirun -v -c [AG+Coord] [input file] [output file]\n");
+                return -1;
+        }//End switch
 
-	  	sprintf(arch_reporte_pro,"%s%s", ruta_resultados, "reporte.pro"); //Archivo de reporte de variables importantes por corrida, relacionada por cada problema a resolver 
-		//Crea un nuevo archivo de reporte de variables importantes de cada corrida de los problemas a resolver
-	  	if ((rprofp = fopen(arch_reporte_pro,"w")) == NULL) {
-	   		fprintf(stderr,"\nNo se pudo crear archivo %s\n", arch_reporte_pro);
-	  		return -1;
-	  	}//End if
-	  	 
-	  	sprintf(arch_reporte_alg,"%s%s", ruta_resultados, "reporte.alg"); //Archivo de reporte de variables importantes por corrida, relacionada con el algoritmo genético a resolver 
-		//Crea un nuevo archivo de reporte de variables importantes del Algorito Genético
-	  	if ((ralgfp = fopen(arch_reporte_alg,"w")) == NULL) {
-	   		fprintf(stderr,"\nNo se pudo crear archivo %s\n", arch_reporte_alg);
-	  		return -1;
-	  	}//End if
-	}//End if
-  	
-  	sprintf(arch_evolucion,"%sevol-n%d.alg", ruta_resultados, rank); //Archivo con evolución del Algoritmo Genético por cada corrida 
-	//Crea un nuevo archivo de evolución
-  	if ((evofp = fopen(arch_evolucion,"w")) == NULL) {
-   		fprintf(stderr,"\nNo se pudo crear archivo %s\n", arch_evolucion);
-  		return -1;
-  	}//End if
+        sprintf(arch_reporte_pro,"%s%s", ruta_resultados, "reporte.pro"); //Archivo de reporte de variables importantes por corrida, relacionada por cada problema a resolver 
+        //Crea un nuevo archivo de reporte de variables importantes de cada corrida de los problemas a resolver
+        if ((rprofp = fopen(arch_reporte_pro,"w")) == NULL) {
+                fprintf(stderr,"\nNo se pudo crear archivo %s\n", arch_reporte_pro);
+                return -1;
+        }//End if
 
-   	//Inicializa variables que determinan si encabezados de archivos de resultados están impresas o no
-   	encabezado_resultado_algoritmo = 0;
-   	encabezado_resultado_problema  = 0;
-   	
-   	return 0;
+        sprintf(arch_reporte_alg,"%s%s", ruta_resultados, "reporte.alg"); //Archivo de reporte de variables importantes por corrida, relacionada con el algoritmo genético a resolver 
+        //Crea un nuevo archivo de reporte de variables importantes del Algorito Genético
+        if ((ralgfp = fopen(arch_reporte_alg,"w")) == NULL) {
+                fprintf(stderr,"\nNo se pudo crear archivo %s\n", arch_reporte_alg);
+                return -1;
+        }//End if
+    }//End if
+
+    sprintf(arch_evolucion,"%sevol-n%d.alg", ruta_resultados, rank); //Archivo con evolución del Algoritmo Genético por cada corrida 
+    //Crea un nuevo archivo de evolución
+    if ((evofp = fopen(arch_evolucion,"w")) == NULL) {
+            fprintf(stderr,"\nNo se pudo crear archivo %s\n", arch_evolucion);
+            return -1;
+    }//End if
+
+    //Inicializa variables que determinan si encabezados de archivos de resultados están impresas o no
+    encabezado_resultado_algoritmo = 0;
+    encabezado_resultado_problema  = 0;
+
+    return 0;
 }//End inicializa_archivos
 
 void cierra_archivos(void) 

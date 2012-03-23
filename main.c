@@ -461,7 +461,7 @@ int main(int argc,char *argv[])
       	}//End for
       	if(runmax == 0){
          	//Que runmax = 0 significa que la consistencia del archivo arrojó un error 
-         	printf("Archivo %s NO procesado por Rank %d debido a error...   [OK]\n", nomarch, rank);
+         	printf("Archivo %s NO procesado por Rank %d debido a errors...   [OK]\n", nomarch, rank);
       	}//End if
    	}//End else    
 

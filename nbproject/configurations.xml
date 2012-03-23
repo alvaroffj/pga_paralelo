@@ -12,7 +12,39 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>app.c</itemPath>
+      <itemPath>app.h</itemPath>
+      <itemPath>app2.c</itemPath>
+      <itemPath>app2.h</itemPath>
+      <itemPath>app_g.c</itemPath>
+      <itemPath>app_g.h</itemPath>
+      <itemPath>app_sp.c</itemPath>
+      <itemPath>app_sp.h</itemPath>
+      <itemPath>comunica.c</itemPath>
+      <itemPath>comunica.h</itemPath>
+      <itemPath>generate.c</itemPath>
+      <itemPath>generate.h</itemPath>
+      <itemPath>initial.c</itemPath>
+      <itemPath>initial.h</itemPath>
       <itemPath>main.c</itemPath>
+      <itemPath>master.c</itemPath>
+      <itemPath>master.h</itemPath>
+      <itemPath>memory.c</itemPath>
+      <itemPath>memory.h</itemPath>
+      <itemPath>operators.c</itemPath>
+      <itemPath>operators.h</itemPath>
+      <itemPath>random.c</itemPath>
+      <itemPath>random.h</itemPath>
+      <itemPath>rselect.c</itemPath>
+      <itemPath>rselect.h</itemPath>
+      <itemPath>sga.h</itemPath>
+      <itemPath>statistic.c</itemPath>
+      <itemPath>statistic.h</itemPath>
+      <itemPath>utility.c</itemPath>
+      <itemPath>utility.h</itemPath>
+      <itemPath>var_pcp.h</itemPath>
+      <itemPath>var_pcpir.h</itemPath>
+      <itemPath>var_sp.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
