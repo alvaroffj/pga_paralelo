@@ -12,15 +12,15 @@
 /*
  * Función principal de lectura del archivo
  */
-int app_leearchivo(int tipo_problema, char *nombrearchivo) { 
+int app_leearchivo(int tipo_problema, char *nombrearchivo, int rank_actual) { 
     //Problema de Corte de Pieza Guillotina
     if(tipo_problema == 0){ 
-        if(app_leearchivo_g(nombrearchivo)) return -1;
+        if(app_leearchivo_g(nombrearchivo, rank_actual)) return -1;
         else return 0;
     } 
     //Problema de Strip Packing
     else if(tipo_problema == 1) { 
-        if(app_leearchivo_sp(nombrearchivo)) return -1;
+        if(app_leearchivo_sp(nombrearchivo, rank_actual)) return -1;
         else return 0;
     } else return 0;
 }

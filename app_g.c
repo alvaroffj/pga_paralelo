@@ -224,15 +224,18 @@ void app_ordena_piezas_problema_g(void)
 }//End app_ordena_piezas_problema_g
 
 //Función principal de lectura del archivo
-int app_leearchivo_g(char *nombrearchivo) {
+int app_leearchivo_g(char *nombrearchivo, int rank_actual) {
         FILE *fp;
         int i,num,alt,anc,lim,id=1;
         char nombre_archivo[100];
 
-        sprintf(nombre_archivo, "%s%s", ruta_instancias, nombrearchivo);
-        if((fp = fopen(nombre_archivo,"r"))== NULL){
-                fprintf(outfp,"error al leer archivo %s\n",nombrearchivo);
-                return 0;
+        if(rank_actual == 0) //Lee archivo intancia de directorio intancias
+            sprintf(nombre_archivo, "%s%s", ruta_instancias, nombrearchivo);
+   	else //Lee archivo desde directorio resultados, el archivo ha sido creado antes temporalmente
+            sprintf(nombre_archivo, "%s", nombrearchivo);
+        if((fp = fopen(nombre_archivo,"r"))== NULL) {
+            fprintf(outfp,"error al leer archivo %s\n",nombrearchivo);
+            return 0;
         }
 
         //Inicialización de variables globales

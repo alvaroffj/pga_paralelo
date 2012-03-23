@@ -154,7 +154,7 @@ void creaLayout() {
 /*
  * Leer archivo de entrada
  */
-int app_leearchivo_sp(char *nombrearchivo) {
+int app_leearchivo_sp(char *nombrearchivo, int rank_actual) {
     FILE *fp;
     char nombre_archivo[100];
     char datos_pieza[500];
@@ -163,9 +163,11 @@ int app_leearchivo_sp(char *nombrearchivo) {
     int j=0;
     printf("Leyendo archivo de entrada\n");
 
-    sprintf(nombre_archivo, "%s%s", ruta_instancias, nombrearchivo);
-
-
+    if(rank_actual == 0) //Lee archivo intancia de directorio intancias
+            sprintf(nombre_archivo, "%s%s", ruta_instancias, nombrearchivo);
+    else //Lee archivo desde directorio resultados, el archivo ha sido creado antes temporalmente
+        sprintf(nombre_archivo, "%s", nombrearchivo);
+    
     if((fp = fopen(nombre_archivo,"r"))== NULL){//Si no se encuentra o hay errores al leer el archivo de entrada
         printf("Error al leer archivo %s\n",nombrearchivo);
         return 0;
