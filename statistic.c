@@ -42,7 +42,7 @@ void statistics(struct individual *pop)
    
    	// Si actualizó mejor individuo se pasan los datos restantes del mejor individuo.
    	if(k >= 0) {
-            printf("Nuevo Mejor: %f\n", bestfit.fitness);
+            printf("Nuevo Mejor[%d]: %f \n", gen, bestfit.fitness);
             for(i = 0; i < chromsize; i++) // Actualiza Cromosoma String
                 bestfit.chrom[i] = pop[k].chrom[i];
             

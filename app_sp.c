@@ -384,24 +384,13 @@ void app_genera_resultados_problema_sp(int corrida, int tipo_problema, char *nom
     printf("app_genera_resultados_problema_sp\n");
     if (encabezado_resultado_problema == 0) {
         //IMPRIME ENCABEZADO DE LOS RESULTADOS DEL PROBLEMA
-        fprintf(rprofp, "CORRIDA;TIPO_PROBLEMA;ARCHIVO_PROBLEMA;CANTIDAD_PIEZAS;CANTIDAD_TIPOS_PIEZAS;");
-        fprintf(rprofp, "ANCHO_LAMINA;LARGO_LAMINA;PESO_PERDIDA;PESO_DISTANCIA;PESO_DIGREGACION;");
-        fprintf(rprofp, "MS_CALIDAD;MS_FITNESS;MS_PERDIDA_REAL;MS_DISTANCIA;MS_DIGREGACION;");
-        fprintf(rprofp, "MS_AREA_OCUPADA;MS_NUMERO_PIEZAS_COLOCADAS;MS_NUMERO_PERDIDAS_GENERADAS;");
-        fprintf(rprofp, "GENERACION_OCURRENCIA\n");
+        fprintf(rprofp, "CORRIDA;TIPO_PROBLEMA;ARCHIVO_PROBLEMA;");
+        fprintf(rprofp, "ANCHO_LAMINA;MS_FITNESS;MS_PERDIDA_REAL;");
         encabezado_resultado_problema = 1; //Con ésto no imprime más el encabezado
     }//End if 
     //IMPRIME RESULTADOS DEL PROBLEMA
-/*
-    fprintf(rprofp, "%d;%d;%s;%d;%d;%d;%d;%f;%f;%f;%f;%f;%f;%f;%f;%f;%d;%d;%d\n",
-        //CORRIDA;TIPO_PROBLEMA;ARCHIVO_PROBLEMA;CANTIDAD_PIEZAS;CANTIDAD_TIPOS_PIEZAS;ANCHO_LAMINA;LARGO_LAMINA;
-        corrida, tipo_problema, nombrearchivo, NumPie, cantidadtipospiezas, AnchoPl, AltoPl,
-        //PESO_PERDIDA;PESO_DISTANCIA;PESO_DIGREGACION;MS_CALIDAD;MS_FITNESS;		
-        peso_perdida, peso_distancia, peso_digregacion, bestfit.PEval.calidad, bestfit.fitness,
-        //MS_PERDIDA_REAL;MS_DISTANCIA;MS_DIGREGACION;
-        bestfit.PEval.c_perdidareal, bestfit.PEval.c_distancia, bestfit.PEval.c_digregacion,
-        //MS_AREA_OCUPADA;MS_NUMERO_PIEZAS_COLOCADAS;MS_NUMERO_PERDIDAS_GENERADAS;GENERACION_OCURRENCIA;
-        bestfit.PEval.areaocupada, bestfit.PEval.piezas, bestfit.PEval.n_perdidas, bestfit.generation);
-*/
+    fprintf(rprofp, "%d;%d;%s;%d;%f;%f;\n",
+        corrida, tipo_problema, nombrearchivo, ancho, bestfit.fitness,
+        bestfit.PEval.perdida);
 }
 
