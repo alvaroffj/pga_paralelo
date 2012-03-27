@@ -28,7 +28,7 @@ void statistics(struct individual *pop)
       	varianza = varianza + (pop[j].fitness * pop[j].fitness); //calculo de la varianza
       	// Nuevo mejor individuo global
       	if(pop[j].fitness < bestfit.fitness) {
-         	bestfit.fitness = pop[j].fitness;
+            bestfit.fitness = pop[j].fitness;
          	k = j; //Quiere decir que se actualizó mejor individuo
       	}//End if
    	}//End for
@@ -41,15 +41,19 @@ void statistics(struct individual *pop)
    
    	// Si actualizó mejor individuo se pasan los datos restantes del mejor individuo.
    	if(k >= 0) {
-     	for(i = 0; i < chromsize; i++) // Actualiza Cromosoma String
-         	bestfit.chrom[i] = pop[k].chrom[i];
-      	for(i = 0; i < chmutsize; i++)// Actualiza Cromosoma Mutación
-         	bestfit.chmut[i] = pop[k].chmut[i];
-		for(i = 0; i < chlistasize; i++) // Actualiza Cromosoma Lista
-            bestfit.pusListaPiezas[i] = pop[k].pusListaPiezas[i];
-       	bestfit.fitness     = pop[k].fitness;
-      	bestfit.PEval       = pop[k].PEval;
-      	bestfit.generation  = gen;
+            printf("Nuevo Mejor: %f\n", bestfit.fitness);
+            for(i = 0; i < chromsize; i++) // Actualiza Cromosoma String
+                bestfit.chrom[i] = pop[k].chrom[i];
+            
+            for(i = 0; i < chmutsize; i++)// Actualiza Cromosoma Mutación
+                bestfit.chmut[i] = pop[k].chmut[i];
+            
+            for(i = 0; i < chlistasize; i++) // Actualiza Cromosoma Lista
+                bestfit.pusListaPiezas[i] = pop[k].pusListaPiezas[i];
+            
+            bestfit.fitness     = pop[k].fitness;
+            bestfit.PEval       = pop[k].PEval;
+            bestfit.generation  = gen;
    	}//End if
 	   
    	//Calcula el tiempo actual transcurrido

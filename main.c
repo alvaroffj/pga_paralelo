@@ -234,7 +234,9 @@ int main(int argc,char *argv[])
         	         	if(printstrings == 1) fprintf(outfp,"\nGENERATION %d->%d\n",gen,maxgen);
                   		// Crea una nueva generación
                   		generation(tipo_problema);
+/*
                                 printf("generacion: %d de %d => %f\n",gen, maxgen, bestfit.fitness);
+*/
       
                   		// Efectúa estadísticas sobre nueva población y obtiene mejor individuo
                   		statistics(newpop);
