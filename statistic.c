@@ -28,6 +28,7 @@ void statistics(struct individual *pop)
       	varianza = varianza + (pop[j].fitness * pop[j].fitness); //calculo de la varianza
       	// Nuevo mejor individuo global
       	if(pop[j].fitness < bestfit.fitness) {
+            printf("Nuevo Mejor Parcial: %f\n", bestfit.fitness);
             bestfit.fitness = pop[j].fitness;
          	k = j; //Quiere decir que se actualizó mejor individuo
       	}//End if
