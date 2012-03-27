@@ -187,9 +187,10 @@ int app_leearchivo_sp(char *nombrearchivo, int rank_actual) {
 
         Datos_pieza aux_pieza;
         area_total=0;
+        int id = 0;
         // Lee ancho y alto para cada pieza
         // Ciclo para leer todas las piezas del archivo de entrada
-        while( fscanf(fp,"%d %d", &aux_pieza.ancho, &aux_pieza.alto) != EOF) {
+        while( fscanf(fp,"%d %d %d", &id, &aux_pieza.ancho, &aux_pieza.alto) != EOF) {
             aux_pieza.area = aux_pieza.ancho * aux_pieza.alto; //Se calcula el area de la pieza
             aux_pieza.id = j; //Se asigna id a la pieza
             area_total += aux_pieza.area;
