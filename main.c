@@ -319,7 +319,9 @@ int main(int argc,char *argv[])
   	}//End if
    	else {
       	//Rank = 0 => Coordinador
+/*
    		printf("#Bienvenido a Máquina Paralela para Problemas de Optimización Combinatoria, espere por favor...\n");
+*/
       	
       	// Revisa consistencia del archivo de entrada in.txt
       	runmax = consistenciaarchivo(workers);
