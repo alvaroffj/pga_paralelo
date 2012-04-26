@@ -333,7 +333,12 @@ int main(int argc,char *argv[])
          	//Lee archivo en infp con parametros (todos ya chequeados)
          	//OJO => Cada AG tendrá popsize/workers individuos => Población Total = popsize          	
 			//fscanf(infp,"%d %s %d %s %d %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env_rec, &tasa_migracion, answer_mod_mig, &randomseed);
-   			fscanf(infp,"%d %s %d %s %d %f %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env, &pind_rec, &tasa_migracion, answer_mod_mig, &randomseed);
+//   			fscanf(infp,"%d %s %d %s %d %f %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env, &pind_rec, &tasa_migracion, answer_mod_mig, &randomseed);
+            int i=0;
+            for(i=0; i<argc; i++) {
+                printf("argv[%i]: %s\n", i, argv[i]);
+            }
+            exit(0);
          	
 			//Inicializa contador de segundos de comunicación 
          	time_comm = 0.0;
