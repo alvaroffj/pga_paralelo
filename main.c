@@ -447,9 +447,12 @@ int main(int argc,char *argv[])
 					app_genera_resultados_problema(run, tipo_problema, nomarch);
 	
 				  	//IMPRIME SALIDA PARA PROGRAMA PARAMILS
+/*
 				  	printf("RunsExecuted = 1\n");
 				  	printf("CPUTime_Mean = %f\n", time_consumation.elapsed_time);
 				  	printf("BestSolution_Mean = %f\n", bestfit.fitness);
+*/
+                                        printf("Result for ParamILS: SAT, %f, %i, %f, %s\n", -1.0, -1, bestfit.fitness, argv[7]);
 
 				  	//Genera la Salida hacia archivo de Resultados LAYOUT
 				  	app2_objfunc(tipo_problema, nomarch, bestfit, run);

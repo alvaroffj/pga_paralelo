@@ -28,7 +28,7 @@ void statistics(struct individual *pop)
       	varianza = varianza + (pop[j].fitness * pop[j].fitness); //calculo de la varianza
       	// Nuevo mejor individuo global
       	if(pop[j].fitness < bestfit.fitness) {
-            printf("Nuevo Mejor Parcial: %f\n", bestfit.fitness);
+//            printf("Nuevo Mejor Parcial: %f\n", bestfit.fitness);
             bestfit.fitness = pop[j].fitness;
          	k = j; //Quiere decir que se actualizó mejor individuo
       	}//End if
@@ -42,7 +42,7 @@ void statistics(struct individual *pop)
    
    	// Si actualizó mejor individuo se pasan los datos restantes del mejor individuo.
    	if(k >= 0) {
-            printf("Nuevo Mejor[%d]: %f \n", gen, bestfit.fitness);
+//            printf("Nuevo Mejor[%d]: %f \n", gen, bestfit.fitness);
             for(i = 0; i < chromsize; i++) // Actualiza Cromosoma String
                 bestfit.chrom[i] = pop[k].chrom[i];
             
