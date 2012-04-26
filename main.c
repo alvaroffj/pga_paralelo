@@ -93,7 +93,8 @@ int main(int argc,char *argv[])
          	//Nueva semilla aleatoria
          	for(rank_seed = 1; rank_seed <= rank; rank_seed++) {
             	do {
-               		randomseed = nueva_semilla();
+//               		randomseed = nueva_semilla();
+                    randomseed = (float)((atoi(argv[7])%10000)/10000.0);
             	}while(randomseed == 0);
          	}//End for
       		#ifdef _PRINT_MIGRACION_
@@ -336,9 +337,20 @@ int main(int argc,char *argv[])
 //   			fscanf(infp,"%d %s %d %s %d %f %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env, &pind_rec, &tasa_migracion, answer_mod_mig, &randomseed);
             int i=0;
             for(i=0; i<argc; i++) {
-                printf("argv[%i]: %s\n", i, argv[i]);
+//                printf("argv[%i]: %s\n", i, argv[i]);
+                if(strcmp(argv[i], "-pr")==0) tipo_problema = atoi(argv[++i]);
+                if(strcmp(argv[i], "-po")==0) popsize = atoi(argv[++i]);
+                if(strcmp(argv[i], "-g")==0) maxgen = atoi(argv[++i]);
+                if(strcmp(argv[i], "-m")==0) pmutation = atof(argv[++i]);
+                if(strcmp(argv[i], "-c")==0) pcross = atof(argv[++i]);
+                if(strcmp(argv[i], "-pe")==0) pind_env = atof(argv[++i]);
+                if(strcmp(argv[i], "-pa")==0) pind_rec = atof(argv[++i]);
+                if(strcmp(argv[i], "-tm")==0) tasa_migracion = atoi(argv[++i]);
+                if(strcmp(argv[i], "-am")==0) sprintf(answer_mod_mig, "%s", argv[++i]);
+                if(strcmp(argv[i], "-f")==0) sprintf(nomarch, "%s", argv[++i]);
+                if(strcmp(argv[i], "-a")==0) sprintf(answer, "%s", argv[++i]);
             }
-            exit(0);
+//            exit(0);
          	
 			//Inicializa contador de segundos de comunicación 
          	time_comm = 0.0;
