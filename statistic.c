@@ -61,7 +61,7 @@ void statistics(struct individual *pop)
    	time_middle = MPI_Wtime() - time_start;
    
    	// Escribe en archivo de Estaditicas para problema particular
-   	fprintf(evofp, "%d %d %.5f %.5f %.5f %.5f %.3f %d\n", n_migracion, gen, min, max, med, desvestandar, time_middle, bestfit.generation);
+   	fprintf(evofp, "%d %d %.5f %.5f %.5f %.5f %.3f %d %f\n", n_migracion, gen, min, max, med, desvestandar, time_middle, bestfit.generation, bestfit.fitness);
 }//End statistics
 
 struct individual *obtiene_individuos_a_enviar(struct individual *opop, struct individual *npop)
