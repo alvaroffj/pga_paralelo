@@ -95,6 +95,7 @@ int main(int argc,char *argv[])
             	do {
 //               		randomseed = nueva_semilla();
                     randomseed = (float)((atoi(argv[7])%10000)/10000.0);
+                    printf("%f\n", randomseed);
             	}while(randomseed == 0);
          	}//End for
       		#ifdef _PRINT_MIGRACION_
