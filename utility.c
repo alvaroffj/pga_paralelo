@@ -120,8 +120,18 @@ int inicializa_archivos(int argc,char *argv[], int rank)
                 }
                 break;
             default:
-                fprintf(stderr,"Uso: mpirun -v -c [AG+Coord] [input file] [output file]\n");
-                return -1;
+                if((infp = fopen(argv[1],"r")) == NULL) { /* abre archivo de entrada in.txt */
+                    fprintf(stderr,"!!! Error, no puede abrir archivo de entrada %s \n",argv[1]);
+                    return -1;
+                }
+                sprintf(arch_salida,"%s%s",ruta_resultados, argv[2]); //Ruta del archivo de salida (layout)
+                if((outfp = fopen(arch_salida,"w")) == NULL) {
+                    fprintf(stderr,"!!! Error, no puede abrir archivo de salida %s \n",arch_salida);
+                    return -1;
+                }
+//                fprintf(stderr,"Uso: mpirun -v -c [AG+Coord] [input file] [output file]\n");
+//                return -1;
+                break;
         }//End switch
 
         sprintf(arch_reporte_pro,"%s%s", ruta_resultados, "reporte.pro"); //Archivo de reporte de variables importantes por corrida, relacionada por cada problema a resolver 
