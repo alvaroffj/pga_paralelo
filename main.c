@@ -476,10 +476,10 @@ int main(int argc,char *argv[])
 	      	// Libera variables del problema  
 	      	app_free(tipo_problema);
 
-   			#ifdef _PRINT_MIGRACION_
+                #ifdef _PRINT_MIGRACION_
          		printf("#Corrida %d, Archivo %s procesado por Coordinador...   [OK]\n", run, nomarch);
          	#else
-         		printf("#Corrida %d, Archivo %s procesado...   [OK]\n", run, nomarch);
+//         		printf("#Corrida %d, Archivo %s procesado...   [OK]\n", run, nomarch);
          	#endif
       	}//End for
       	if(runmax == 0){

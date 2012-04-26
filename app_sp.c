@@ -389,7 +389,7 @@ void app_objfunc_sp(struct individual *critter) {
  * Escribe resultados en el archivo de salida
  */
 void app_genera_resultados_problema_sp(int corrida, int tipo_problema, char *nombrearchivo) {
-    printf("app_genera_resultados_problema_sp\n");
+//    printf("app_genera_resultados_problema_sp\n");
     if (encabezado_resultado_problema == 0) {
         //IMPRIME ENCABEZADO DE LOS RESULTADOS DEL PROBLEMA
         fprintf(rprofp, "CORRIDA;TIPO_PROBLEMA;ARCHIVO_PROBLEMA;");
