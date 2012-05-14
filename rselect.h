@@ -3,6 +3,7 @@
 
 void preselect(void);
 int  xselect(void);
+int   tournament(void);
 
 #endif
 

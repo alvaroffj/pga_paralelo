@@ -40,3 +40,12 @@ int xselect(void)
    	return(i-1);
 }//End xselect
 
+int tournament(void) {
+    int a,b;
+    
+    a = (int) (randomperc()*1000)%(popsize-1);
+    b = (int) (randomperc()*1000)%(popsize-1);
+    
+    if(oldpop[a].fitness > oldpop[b].fitness) return b;
+    else return a;
+}

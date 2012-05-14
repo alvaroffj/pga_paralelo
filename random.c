@@ -104,13 +104,13 @@ void randomize(void)
 /************************ GENERACION DE SEMILLA ALEATORIA *************************/
 /**********************************************************************************/
 
-/*********** PARA 32 BITS ****************/
+/*********** PARA 32 BITS ****************
 const unsigned long MSB = 0x80000000L;
 const unsigned long ALL_BITS = 0xffffffffL;
 const unsigned long HALF_RANGE = 0x40000000L;
 /*****************************************/
 
-/*********** PARA 64 BITS ****************
+/*********** PARA 64 BITS ****************/
 const unsigned long MSB = 0x8000000000000000L;
 const unsigned long ALL_BITS = 0xffffffffffffffffL;
 const unsigned long HALF_RANGE = 0x4000000000000000L;
