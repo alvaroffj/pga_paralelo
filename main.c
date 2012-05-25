@@ -243,7 +243,12 @@ int main(int argc,char *argv[])
                             comunicacion_asincrona_con_coordinador();         
                             else
                             //Establece comunicación sincrona con Coordinador
-                            comunicacion_sincrona_con_coordinador();         
+                            comunicacion_sincrona_con_coordinador();    
+                            printf("rank %i gen %i best fitness: %f\n", rank, gen, bestfit.fitness);
+                            if(bestfit.fitness < 107.0) {
+                                printf("rank %i gen %i best fitness: %f done!\n", rank, gen, bestfit.fitness);
+                                gen = maxgen;
+                            }
                             // Avanza de Generación
                             temppop = oldpop;
                             oldpop = newpop;
