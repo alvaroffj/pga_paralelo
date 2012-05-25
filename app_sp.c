@@ -208,15 +208,11 @@ int app_leearchivo_sp(char *nombrearchivo, int rank_actual) {
             aux_pieza.id = j; //Se asigna id a la pieza
             area_total += aux_pieza.area;
             lista_piezas[j] = aux_pieza; //Se ingresa la pieza
-/*
             printf("Pieza %d: %d x %d => %d\n", lista_piezas[j].id, lista_piezas[j].ancho, lista_piezas[j].alto, lista_piezas[j].area);
-*/
             j++;
         }
         
-/*
         printf("Area Total: %d\n", area_total);
-*/
         //Cierra archivo de piezas
         fclose(fp);
         largo_cromosoma = numero_piezas + bit_reservados;
