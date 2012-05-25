@@ -91,7 +91,7 @@ float fitness() {
  * Inserta las piezas en la tira, según el orden y sentido correspondiente
  */
 void creaLayout() {
-    int i, x = 0, j, altura = 0, n = 1, fit = 0, cAncho = 0, cAlto = 0;
+    int i, x = 0, j, altura = 0, n = 1, fit = 0, cAncho = 0, cAlto = 0, pen = 0;
     Datos_pieza cPieza;
 
     for(i=0; i<ancho; i++) {
@@ -119,11 +119,16 @@ void creaLayout() {
                     cAlto = cPieza.alto;
                 } else n++;
             } else { //rotada en 90°
-                if(cPieza.alto <= (ancho - x)) {
-                    fit = 1;
-                    cAlto = cPieza.ancho;
-                    cAncho = cPieza.alto;
-                } else n++;
+                if(cPieza.alto <= ancho) {
+                    if(cPieza.alto <= (ancho - x)) {
+                        fit = 1;
+                        cAlto = cPieza.ancho;
+                        cAncho = cPieza.alto;
+                    } else n++;
+                } else {
+                    arreglo_rotar[arreglo_orden[i]] = 1;
+                    pen++;
+                }
             }
         }
         fit = 0;
@@ -134,7 +139,9 @@ void creaLayout() {
             }
         }
         
+/*
         printf("insertar pieza[%d]: %d x %d en (%d,%d)\n", arreglo_orden[i], cAncho, cAlto, x, altura);
+*/
         for(j=x; j<cAncho+x; j++) {
             arreglo_alturas[j] = altura + cAlto;
         }
@@ -146,11 +153,22 @@ void creaLayout() {
         printf("\n");
 */
     }
+/*
     printf("arreglo_altura: ");
     for(j=0; j<ancho; j++) {
         printf("%d ", arreglo_alturas[j]);
     }
     printf("\n");
+*/
+    
+    if(pen>0) {
+/*
+        printf("pen: %i\n", pen);
+*/
+        for(j=0; j<ancho; j++) {
+            arreglo_alturas[j] = arreglo_alturas[j] + 10*pen;
+        }
+    }
 }
 
 
