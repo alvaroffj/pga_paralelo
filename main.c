@@ -244,11 +244,13 @@ int main(int argc,char *argv[])
                             else
                             //Establece comunicación sincrona con Coordinador
                             comunicacion_sincrona_con_coordinador();    
+/*
                             printf("rank %i gen %i best fitness: %f\n", rank, gen, bestfit.fitness);
                             if(bestfit.fitness < 107.0) {
                                 printf("rank %i gen %i best fitness: %f done!\n", rank, gen, bestfit.fitness);
                                 gen = maxgen;
                             }
+*/
                             // Avanza de Generación
                             temppop = oldpop;
                             oldpop = newpop;
@@ -289,9 +291,9 @@ int main(int argc,char *argv[])
                         if(status.MPI_TAG == MSJ_TERMINO_CONFIRMADO){
                             MPI_Recv(0, 0, MPI_INT, nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
                             flag1 = 0;
-                            //#ifdef _PRINT_MIGRACION_
-                            printf("Rank = %d Recibió desde Rank = 0 Mensaje de TERMINO_CONFIRMADO, pasa siguiente archivo o termina...\n", rank);
-                            //#endif
+                            #ifdef _PRINT_MIGRACION_
+                                printf("Rank = %d Recibió desde Rank = 0 Mensaje de TERMINO_CONFIRMADO, pasa siguiente archivo o termina...\n", rank);
+                            #endif
                             break;
                         }//End if
                     }//End if
