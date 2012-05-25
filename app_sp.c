@@ -134,7 +134,9 @@ void creaLayout() {
             }
         }
         
+/*
         printf("insertar pieza[%d]: %d x %d en (%d,%d)\n", arreglo_orden[i], cPieza.ancho, cPieza.alto, x, altura);
+*/
         for(j=x; j<cAncho+x; j++) {
             arreglo_alturas[j] = altura + cAlto;
         }
@@ -146,11 +148,13 @@ void creaLayout() {
         printf("\n");
 */
     }
+/*
     printf("arreglo_altura: ");
     for(j=0; j<ancho; j++) {
         printf("%d ", arreglo_alturas[j]);
     }
     printf("\n");
+*/
 }
 
 
@@ -184,7 +188,9 @@ int app_leearchivo_sp(char *nombrearchivo, int rank_actual) {
 
     // Lee el numero de piezas y el ancho del strip
     fscanf(fp,"%d %d",&numero_piezas,&ancho);
+/*
     printf("Piezas: %d\nAncho: %d\n", numero_piezas, ancho);
+*/
     if(numero_piezas != 0) {
         //Se establece la memoria de la lista de piezas
         lista_piezas = (Datos_pieza *) malloc(numero_piezas * sizeof(Datos_pieza)); //La lista de piezas guarda cada estructura de pieza
@@ -204,11 +210,15 @@ int app_leearchivo_sp(char *nombrearchivo, int rank_actual) {
             aux_pieza.id = j; //Se asigna id a la pieza
             area_total += aux_pieza.area;
             lista_piezas[j] = aux_pieza; //Se ingresa la pieza
+/*
             printf("Pieza %d: %d x %d => %d\n", lista_piezas[j].id, lista_piezas[j].ancho, lista_piezas[j].alto, lista_piezas[j].area);
+*/
             j++;
         }
         
+/*
         printf("Area Total: %d\n", area_total);
+*/
         //Cierra archivo de piezas
         fclose(fp);
         largo_cromosoma = numero_piezas + bit_reservados;
