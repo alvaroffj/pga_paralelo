@@ -244,7 +244,9 @@ int main(int argc,char *argv[])
                             else
                             //Establece comunicación sincrona con Coordinador
                             comunicacion_sincrona_con_coordinador();    
+/*
                             printf("rank %i gen %i best fitness: %f\n", rank, gen, bestfit.fitness);
+*/
 /*
                             if(bestfit.fitness < 107.0) {
                                 printf("rank %i gen %i best fitness: %f done!\n", rank, gen, bestfit.fitness);
@@ -277,9 +279,9 @@ int main(int argc,char *argv[])
                 for(;;){
                     MPI_Test(&request, &flag2, &status);
                     if(flag2 == true){
-                        //#ifdef _PRINT_MIGRACION_
+                        #ifdef _PRINT_MIGRACION_
                             printf("Envió desde Rank = %d a Rank = 0 Mensaje de Término, archivo %s...\n", rank, nomarch);
-                        //#endif
+                        #endif
                         break;
                     }//End If
                 }//End for
