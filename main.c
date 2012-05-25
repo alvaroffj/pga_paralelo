@@ -67,258 +67,253 @@ int main(int argc,char *argv[])
    		printf("#Bienvenido a MAPAPOC (MÁquina PAralela para Problemas de Optimización Combinatoria) en Rank %d... [OK]\n", rank);
     #endif
       
-   	if(rank != 0){
-      	//Inicializa semilla aleatoria
-      	inicializa_semilla();
-   
-      	//Espera que nodo0 entregue dato runmax (cantidad de archivos a procesar)
-      	for(;;){
-         	MPI_Iprobe(nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &flag1, &status);
-         	if(flag1 == true){
-         		if (status.MPI_TAG == MSJ_RUNMAX){
-               		MPI_Recv(&runmax, 1, MPI_INT, nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-               		flag1 = 0;
-               		#ifdef _PRINT_MIGRACION_
-                  		printf("Rank = %d Recibió desde Rank = 0 Mensaje RUNMAX = %d (cantidad máxima de instancias a resolver)...\n", rank, runmax);
-               		#endif
-               		break;
-            	}//End else if
-         	}//End if
-      	}//End for
-   
-      	for(run=1;run<=runmax;run++) {
-      		#ifdef _PRINT_MIGRACION_
-         		printf("Rank = %d Antes de generar semilla aleatoria...\n", rank);
-      		#endif
-         	//Nueva semilla aleatoria
-         	for(rank_seed = 1; rank_seed <= rank; rank_seed++) {
-            	do {
-//               		randomseed = nueva_semilla();
-                    randomseed = (float)((atoi(argv[7])%10000)/10000.0);
-            	}while(randomseed == 0);
-         	}//End for
-      		#ifdef _PRINT_MIGRACION_
-         		printf("Rank = %d Después de generar semilla aleatoria...\n", rank);
-      		#endif
-         
-         	//Espera que nodo0 entregue información relevante para nodox
-         	for(;;){
-            	MPI_Iprobe(nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &flag1, &status);
-            	if(flag1 == true){
-               		if (status.MPI_TAG == MSJ_LINEA_IN){
-                  		MPI_Recv(linea_in, 100, MPI_CHAR, nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-                  		flag1 = 0;
-                  		//Asigna variables globales desde linea_in recibida desde Rank 0
-                 		//sscanf(linea_in,"%d %s %d %s %d %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env_rec, &tasa_migracion, answer_mod_mig, &randomseed);
-						sscanf(linea_in,"%d %s %d %s %d %f %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env, &pind_rec, &tasa_migracion, answer_mod_mig, &randomseed);                 		
-						randomseed = randomseed + (rank * 0.001);
-						//printf("#Rank = %d estableción semilla : %f\n", rank, randomseed);
-                  		#ifdef _PRINT_MIGRACION_
-                     		printf("Rank = %d Recibió desde Rank = 0 Mensaje LINEA_IN (PARAMETROS GLOBALES)...\n", rank);
-                  		#endif
-               		}//End if
-               		else if (status.MPI_TAG == MSJ_CANT_CHAR_A_REC) {
-                  		//cantidad_char_a_recibir es la variable que indica cuantos enteros recibirá nodox desde Rank 0
-                  		MPI_Recv(&cantidad_char_a_recibir, 1, MPI_INT, nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-                  		flag1 = 0;
-                  		#ifdef _PRINT_MIGRACION_
-                     		printf("Rank = %d Recibió desde Rank = 0 Mensaje MSJ_CANT_CHAR_A_REC...\n", rank);
-                  		#endif
-                  		break;
-               		}//End else if
-               		else if (status.MPI_TAG == MSJ_ERROR_ARCHIVO_INSTANCIA) {
-                  		MPI_Recv(0, 0, MPI_INT, nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-                  		flag1 = 0;
-                  		cantidad_char_a_recibir = -1; //setea a -1 para indicar que hubo error al leer archivo instancia
-                  		#ifdef _PRINT_MIGRACION_
-                     		printf("Rank = %d Recibió desde Rank = 0 Mensaje MSJ_ERROR_ARCHIVO_INSTANCIA...\n", rank);
-                  		#endif
-                  		break;
-               		}//End else if
-            	}//End if
-         	}//End for
-      
-         	//Setea variable printstrings
-         	if(strncmp(answer,"n",1) == 0) printstrings = 0;
-         	else printstrings = 1;
-   
-         	//Setea variables dependiendo de la cantidad de workers 
-         	popsize = popsize / workers;
-         	if(popsize%2) popsize++;
-         	//n_ind_a_enviar = (int) popsize * pind_env_rec;  //% de la subpoblación se envía
-         	//n_ind_a_recibir = (int) popsize * pind_env_rec; //% de la subpoblación se recibe
-		n_ind_a_enviar = (int) popsize * pind_env;  //% de la subpoblación se envía
-         	n_ind_a_recibir = (int) popsize * pind_rec; //% de la subpoblación se recibe
-         	//tasa_migracion = maxgen / workers; //tasa de migración depende de la cantidad de generaciones
-         	#ifdef _PRINT_MIGRACION_
-	            printf("Rank = %d tiene popsize %d, n_ind_a_enviar %d, n_ind_a_recibir %d, tasa_migracion %d...\n", rank, popsize, n_ind_a_enviar, n_ind_a_recibir, tasa_migracion);
-         	#endif
-         
-         	// nro. que identifica que migración está ocurriendo
-         	n_migracion = 0;
-   
-         	//Inicializa contador de segundos de comunicación 
-         	time_comm = 0.0;
-         
-         	//Setea variable modelo_migracion
-         	if(strncmp(answer_mod_mig,"A",1) == 0) modelo_migracion = 0; // Migración Asíncrona
-         	else modelo_migracion = 1; //Migración Síncrona
-      
-			#ifdef _PRINT_MIGRACION_
-				printf("Rank %d debería recibir %d caracteres representando la instancia a resolver...\n", rank, cantidad_char_a_recibir);
-			#endif
-	 
-         	if(cantidad_char_a_recibir > 0) {
-         		
-            	//Lee enteros con información del archivo instancia  
-            	if(lee_char_y_genera_achivo_instancia_tmp(tipo_problema, cantidad_char_a_recibir)) {
-            
-					#ifdef _PRINT_MIGRACION_
-						printf("Espere, MAPAPOC en Rank %d está procesando archivo %s...\n", rank, nomarch);
-					#endif
-					
-					//Actualiza Resultados Estadísticos Evolutivos para cada problema particular
-				   	fprintf(evofp, "\n\nCorrida : %d, PROBLEMA : %s\n", run, nomarch);
-				   	fprintf(evofp, "Migracion Generacion Minimo Maximo Media DesvEstandar TiempoTranscurrido GenMejor\n");
-				   	// Inicia la cuenta de Segundos
-				   	time_start = MPI_Wtime();
-               
-	               	// Rutina de inicialización de variables globales
-    	           	initialize();
-               
-        	       	// Ubica espacio malloc para las estructuras de datos globales
-            	   	initmalloc();
-      	
-        	       	// Define tipos de Individuos a Enviar y Recibir
-            	   	Build_type_pop(envpop, &message_type_send, n_ind_a_enviar);
-               		Build_type_pop(recpop, &message_type_receive, n_ind_a_recibir);
-               
-               		// Initializa la población de individuos y determina datos estadísticos
-               		// y mejor individuo de la población
-               		initpop(tipo_problema);
-               		statistics(oldpop);
-	      
-    	           	//Avisa a nodo0 que esté listo para comenzar evolución...
-               		time_send = MPI_Wtime();
-               		MPI_Isend(0, 0, MPI_INT, nodo0, MSJ_LISTO_PARA_COMENZAR, MPI_COMM_WORLD, &request);
-               		for(;;){
-                  		MPI_Test(&request, &flag2, &status);
-                  		if(flag2 == true){
-                     		time_send = MPI_Wtime() - time_send;
-                     		time_comm += time_send;
-                     		#ifdef _PRINT_MIGRACION_
-                        		printf("Envió desde Rank = %d a Rank = 0 Mensaje Listo para comenzar...\n", rank);
-                     		#endif
-                     		break;
-                  		}//End If
-               		}//End for
-                  
-               		//Espera que nodo0 dé la partida para comenzar evolución...
-               		for(;;){
-                  		MPI_Iprobe(nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &flag1, &status);
-                  		if(flag1 == true){
-                     		if (status.MPI_TAG == MSJ_COMIENCE){
-                        		MPI_Recv(0, 0, MPI_INT, nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-                        		flag1 = 0;
-                        		#ifdef _PRINT_MIGRACION_
-                           			printf("Rank = %d Recibió desde Rank = 0 Mensaje de COMINECE, comienza evolución...\n", rank);
-		                        #endif
-        		                break;
-                			}//End if
-                  		}//End if
-               		}//End for
-                        
-               		//Setea contador de generaciones para Migrar en Modelo de Migración Asíncrona
-               		if (modelo_migracion == 0) cuenta_gen_para_migracion=1;
-	               
-    	           	for(gen=0; gen<maxgen; gen++) {
-        	         	if(printstrings == 1) fprintf(outfp,"\nGENERATION %d->%d\n",gen,maxgen);
-                  		// Crea una nueva generación
-                  		generation(tipo_problema);
-/*
-                                printf("generacion: %d de %d => %f\n",gen, maxgen, bestfit.fitness);
-*/
-      
-                  		// Efectúa estadísticas sobre nueva población y obtiene mejor individuo
-                  		statistics(newpop);
-                  
-                  		if (modelo_migracion == 0) 
-                     		//Establece comunicación Asincrona con Coordinador
-                     		comunicacion_asincrona_con_coordinador();         
-                  		else
-                     		//Establece comunicación sincrona con Coordinador
-                     		comunicacion_sincrona_con_coordinador();         
-                  
-                  		// Avanza de Generación
-                  		temppop = oldpop;
-                  		oldpop = newpop;
-                  		newpop = temppop;
-               		}//End for
-      
-               		// Libera memoria temporal
-               		freeall();
-      
-               		//Libera memoria tipos creados por MPI
-               		MPI_Type_free(&message_type_send);
-               		MPI_Type_free(&message_type_receive);
-            
-            	} else
-                    printf("!!! ADVERTENCIA ¡¡¡ Rank %d no procesó archivo de instancia ya que hubo problemas al leer enteros, generar o leer tmp...\n", rank);
-         	} else 
-                    printf("!!! ADVERTENCIA ¡¡¡ Rank %d no procesó archivo de instancia ya que Rank 0 tuvo problemas al leerlo...\n", rank);
-        	
-	      	// Libera variables del problema  
-	      	app_free(tipo_problema);
+   	if(rank != 0) {
+            //Inicializa semilla aleatoria
+            inicializa_semilla();
 
-	        //Mensaje de término de procesamiento de archivo actual se envía a Rank = 0
-	        MPI_Isend(&time_comm, 1, MPI_DOUBLE, nodo0, MSJ_TERMINO, MPI_COMM_WORLD, &request);
+            //Espera que nodo0 entregue dato runmax (cantidad de archivos a procesar)
+            for(;;){
+                MPI_Iprobe(nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &flag1, &status);
+                if(flag1 == true){
+                    if (status.MPI_TAG == MSJ_RUNMAX){
+                        MPI_Recv(&runmax, 1, MPI_INT, nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+                        flag1 = 0;
+                        #ifdef _PRINT_MIGRACION_
+                            printf("Rank = %d Recibió desde Rank = 0 Mensaje RUNMAX = %d (cantidad máxima de instancias a resolver)...\n", rank, runmax);
+                        #endif
+                        break;
+                    }//End else if
+                }//End if
+            }//End for
+
+            for(run=1; run<=runmax; run++) {
+                #ifdef _PRINT_MIGRACION_
+                        printf("Rank = %d Antes de generar semilla aleatoria...\n", rank);
+                #endif
+                //Nueva semilla aleatoria
+                for(rank_seed = 1; rank_seed <= rank; rank_seed++) {
+                    do {
+//               		randomseed = nueva_semilla();
+                        randomseed = (float)((atoi(argv[7])%10000)/10000.0);
+                    }while(randomseed == 0);
+                }//End for
+                #ifdef _PRINT_MIGRACION_
+                    printf("Rank = %d Después de generar semilla aleatoria...\n", rank);
+                #endif
+
+                //Espera que nodo0 entregue información relevante para nodox
+                for(;;) {
+                    MPI_Iprobe(nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &flag1, &status);
+                    if(flag1 == true){
+                        if (status.MPI_TAG == MSJ_LINEA_IN){
+                            MPI_Recv(linea_in, 100, MPI_CHAR, nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+                            flag1 = 0;
+                            //Asigna variables globales desde linea_in recibida desde Rank 0
+                            //sscanf(linea_in,"%d %s %d %s %d %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env_rec, &tasa_migracion, answer_mod_mig, &randomseed);
+                            sscanf(linea_in,"%d %s %d %s %d %f %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env, &pind_rec, &tasa_migracion, answer_mod_mig, &randomseed);                 		
+                            randomseed = randomseed + (rank * 0.001);
+                            //printf("#Rank = %d estableción semilla : %f\n", rank, randomseed);
+                            #ifdef _PRINT_MIGRACION_
+                                printf("Rank = %d Recibió desde Rank = 0 Mensaje LINEA_IN (PARAMETROS GLOBALES)...\n", rank);
+                            #endif
+                        } else if (status.MPI_TAG == MSJ_CANT_CHAR_A_REC) {
+                            //cantidad_char_a_recibir es la variable que indica cuantos enteros recibirá nodox desde Rank 0
+                            MPI_Recv(&cantidad_char_a_recibir, 1, MPI_INT, nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+                            flag1 = 0;
+                            #ifdef _PRINT_MIGRACION_
+                            printf("Rank = %d Recibió desde Rank = 0 Mensaje MSJ_CANT_CHAR_A_REC...\n", rank);
+                            #endif
+                            break;
+                        } else if (status.MPI_TAG == MSJ_ERROR_ARCHIVO_INSTANCIA) {
+                            MPI_Recv(0, 0, MPI_INT, nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+                            flag1 = 0;
+                            cantidad_char_a_recibir = -1; //setea a -1 para indicar que hubo error al leer archivo instancia
+                            #ifdef _PRINT_MIGRACION_
+                            printf("Rank = %d Recibió desde Rank = 0 Mensaje MSJ_ERROR_ARCHIVO_INSTANCIA...\n", rank);
+                            #endif
+                            break;
+                        }//End else if
+                    }//End if
+                }//End for
+
+                //Setea variable printstrings
+                if(strncmp(answer,"n",1) == 0) printstrings = 0;
+                else printstrings = 1;
+
+                //Setea variables dependiendo de la cantidad de workers 
+                popsize = popsize / workers;
+                if(popsize%2) popsize++;
+                //n_ind_a_enviar = (int) popsize * pind_env_rec;  //% de la subpoblación se envía
+                //n_ind_a_recibir = (int) popsize * pind_env_rec; //% de la subpoblación se recibe
+                n_ind_a_enviar = (int) popsize * pind_env;  //% de la subpoblación se envía
+                n_ind_a_recibir = (int) popsize * pind_rec; //% de la subpoblación se recibe
+                //tasa_migracion = maxgen / workers; //tasa de migración depende de la cantidad de generaciones
+                #ifdef _PRINT_MIGRACION_
+                    printf("Rank = %d tiene popsize %d, n_ind_a_enviar %d, n_ind_a_recibir %d, tasa_migracion %d...\n", rank, popsize, n_ind_a_enviar, n_ind_a_recibir, tasa_migracion);
+                #endif
+
+                // nro. que identifica que migración está ocurriendo
+                n_migracion = 0;
+
+                //Inicializa contador de segundos de comunicación 
+                time_comm = 0.0;
+
+                //Setea variable modelo_migracion
+                if(strncmp(answer_mod_mig,"A",1) == 0) modelo_migracion = 0; // Migración Asíncrona
+                else modelo_migracion = 1; //Migración Síncrona
+
+                #ifdef _PRINT_MIGRACION_
+                    printf("Rank %d debería recibir %d caracteres representando la instancia a resolver...\n", rank, cantidad_char_a_recibir);
+                #endif
+
+                if(cantidad_char_a_recibir > 0) {
+                    //Lee enteros con información del archivo instancia  
+                    if(lee_char_y_genera_achivo_instancia_tmp(tipo_problema, cantidad_char_a_recibir)) {
+                        #ifdef _PRINT_MIGRACION_
+                                printf("Espere, MAPAPOC en Rank %d está procesando archivo %s...\n", rank, nomarch);
+                        #endif
+
+                        //Actualiza Resultados Estadísticos Evolutivos para cada problema particular
+                        fprintf(evofp, "\n\nCorrida : %d, PROBLEMA : %s\n", run, nomarch);
+                        fprintf(evofp, "Migracion Generacion Minimo Maximo Media DesvEstandar TiempoTranscurrido GenMejor\n");
+                        // Inicia la cuenta de Segundos
+                        time_start = MPI_Wtime();
+
+                        // Rutina de inicialización de variables globales
+                        initialize();
+
+                        // Ubica espacio malloc para las estructuras de datos globales
+                        initmalloc();
+
+                        // Define tipos de Individuos a Enviar y Recibir
+                        Build_type_pop(envpop, &message_type_send, n_ind_a_enviar);
+                        Build_type_pop(recpop, &message_type_receive, n_ind_a_recibir);
+
+                        // Initializa la población de individuos y determina datos estadísticos
+                        // y mejor individuo de la población
+                        initpop(tipo_problema);
+                        statistics(oldpop);
+
+                        //Avisa a nodo0 que esté listo para comenzar evolución...
+                        time_send = MPI_Wtime();
+                        MPI_Isend(0, 0, MPI_INT, nodo0, MSJ_LISTO_PARA_COMENZAR, MPI_COMM_WORLD, &request);
+                        for(;;){
+                            MPI_Test(&request, &flag2, &status);
+                            if(flag2 == true){
+                            time_send = MPI_Wtime() - time_send;
+                            time_comm += time_send;
+                            #ifdef _PRINT_MIGRACION_
+                                    printf("Envió desde Rank = %d a Rank = 0 Mensaje Listo para comenzar...\n", rank);
+                            #endif
+                            break;
+                            }//End If
+                        }//End for
+
+                            //Espera que nodo0 dé la partida para comenzar evolución...
+                        for(;;){
+                            MPI_Iprobe(nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &flag1, &status);
+                            if(flag1 == true) {
+                                if (status.MPI_TAG == MSJ_COMIENCE){
+                                    MPI_Recv(0, 0, MPI_INT, nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+                                    flag1 = 0;
+                                    #ifdef _PRINT_MIGRACION_
+                                            printf("Rank = %d Recibió desde Rank = 0 Mensaje de COMINECE, comienza evolución...\n", rank);
+                                    #endif
+                                    break;
+                                }//End if
+                            }//End if
+                        }//End for
+
+                        //Setea contador de generaciones para Migrar en Modelo de Migración Asíncrona
+                        if (modelo_migracion == 0) cuenta_gen_para_migracion=1;
+
+                        for(gen=0; gen<maxgen; gen++) {
+                            if(printstrings == 1) fprintf(outfp,"\nGENERATION %d->%d\n",gen,maxgen);
+                            // Crea una nueva generación
+                            generation(tipo_problema);
+/*
+                            printf("generacion: %d de %d => %f\n",gen, maxgen, bestfit.fitness);
+*/
+
+                            // Efectúa estadísticas sobre nueva población y obtiene mejor individuo
+                            statistics(newpop);
+
+                            if (modelo_migracion == 0) 
+                            //Establece comunicación Asincrona con Coordinador
+                            comunicacion_asincrona_con_coordinador();         
+                            else
+                            //Establece comunicación sincrona con Coordinador
+                            comunicacion_sincrona_con_coordinador();         
+                            printf("rank %i gen %i best fitness: %f\n", rank, gen, bestfit.fitness);
+                            // Avanza de Generación
+                            temppop = oldpop;
+                            oldpop = newpop;
+                            newpop = temppop;
+                        }//End for
+
+                            // Libera memoria temporal
+                        freeall();
+
+                            //Libera memoria tipos creados por MPI
+                        MPI_Type_free(&message_type_send);
+                        MPI_Type_free(&message_type_receive);
+
+                    } else
+                        printf("!!! ADVERTENCIA ¡¡¡ Rank %d no procesó archivo de instancia ya que hubo problemas al leer enteros, generar o leer tmp...\n", rank);
+                } else 
+                    printf("!!! ADVERTENCIA ¡¡¡ Rank %d no procesó archivo de instancia ya que Rank 0 tuvo problemas al leerlo...\n", rank);
+
+                // Libera variables del problema  
+                app_free(tipo_problema);
+
+                //Mensaje de término de procesamiento de archivo actual se envía a Rank = 0
+                MPI_Isend(&time_comm, 1, MPI_DOUBLE, nodo0, MSJ_TERMINO, MPI_COMM_WORLD, &request);
                 for(;;){
                     MPI_Test(&request, &flag2, &status);
-	            if(flag2 == true){
-	               	#ifdef _PRINT_MIGRACION_
-	                	printf("Envió desde Rank = %d a Rank = 0 Mensaje de Término, archivo %s...\n", rank, nomarch);
-	               	#endif
-	               	break;
-	            }//End If
-	        }//End for
-         
-	        //Espera que nodo0 dé el OK para poder finalizar el procesamiento del archivo actual
-	        for(;;){
-	          	MPI_Iprobe(nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &flag1, &status);
-	            if(flag1 == true){
-	            	if (status.MPI_TAG == MSJ_TERMINO_CONFIRMADO){
-	                	MPI_Recv(0, 0, MPI_INT, nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-	                  	flag1 = 0;
-	                  	#ifdef _PRINT_MIGRACION_
-	                     	printf("Rank = %d Recibió desde Rank = 0 Mensaje de TERMINO_CONFIRMADO, pasa siguiente archivo o termina...\n", rank);
-	                  	#endif
-	                  	break;
-	               	}//End if
-	            }//End if
-	      	}//End for
-	        #ifdef _PRINT_MIGRACION_
-	        	printf("#Corrida %d, Archivo %s procesado por Rank %d...   [OK]\n", run, nomarch, rank);
-	        #endif
-	  	}//End for
-   
-	    if(runmax == 0){
-	    	//Que runmax = 0 significa que la consistencia del archivo arrojó un error 
-	        //=> rank debe mandar mensaje al Coordinador que va ha terminar el proceso...
-	        //Mensaje de término de procesamiento de archivo actual se envía a Rank = 0
-	        MPI_Isend(&time_comm, 1, MPI_DOUBLE, nodo0, MSJ_TERMINO, MPI_COMM_WORLD, &request);
-	        for(;;){
-	        	MPI_Test(&request, &flag2, &status);
-	            if(flag2 == true){
-	             	#ifdef _PRINT_MIGRACION_
-	                	printf("Envió desde Rank = %d a Rank = 0 Mensaje de Término, archivo %s...\n", rank, nomarch);
-	               	#endif
-	               	break;
-	        	}//End If
-	        }//End for
-	        printf("Proceso en Rank %d detenido ya que Rank 0 informa error en archivo de entrada...   [OK]\n", rank);
-	 	}//End if
-  	}//End if
-   	else {
+                    if(flag2 == true){
+                        #ifdef _PRINT_MIGRACION_
+                            printf("Envió desde Rank = %d a Rank = 0 Mensaje de Término, archivo %s...\n", rank, nomarch);
+                        #endif
+                        break;
+                    }//End If
+                }//End for
+
+                    //Espera que nodo0 dé el OK para poder finalizar el procesamiento del archivo actual
+                for(;;){
+                    MPI_Iprobe(nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &flag1, &status);
+                    if(flag1 == true){
+                        if(status.MPI_TAG == MSJ_TERMINO_CONFIRMADO){
+                            MPI_Recv(0, 0, MPI_INT, nodo0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+                            flag1 = 0;
+                            #ifdef _PRINT_MIGRACION_
+                            printf("Rank = %d Recibió desde Rank = 0 Mensaje de TERMINO_CONFIRMADO, pasa siguiente archivo o termina...\n", rank);
+                            #endif
+                            break;
+                        }//End if
+                    }//End if
+                }//End for
+                #ifdef _PRINT_MIGRACION_
+                        printf("#Corrida %d, Archivo %s procesado por Rank %d...   [OK]\n", run, nomarch, rank);
+                #endif
+            }//End for
+
+            if(runmax == 0){
+                //Que runmax = 0 significa que la consistencia del archivo arrojó un error 
+                //=> rank debe mandar mensaje al Coordinador que va ha terminar el proceso...
+                //Mensaje de término de procesamiento de archivo actual se envía a Rank = 0
+                MPI_Isend(&time_comm, 1, MPI_DOUBLE, nodo0, MSJ_TERMINO, MPI_COMM_WORLD, &request);
+                for(;;){
+                    MPI_Test(&request, &flag2, &status);
+                    if(flag2 == true){
+                        #ifdef _PRINT_MIGRACION_
+                                printf("Envió desde Rank = %d a Rank = 0 Mensaje de Término, archivo %s...\n", rank, nomarch);
+                        #endif
+                        break;
+                    }//End If
+                }//End for
+                printf("Proceso en Rank %d detenido ya que Rank 0 informa error en archivo de entrada...   [OK]\n", rank);
+            }//End if
+        } else {
       	//Rank = 0 => Coordinador
 /*
    		printf("#Bienvenido a Máquina Paralela para Problemas de Optimización Combinatoria, espere por favor...\n");
@@ -376,7 +371,7 @@ int main(int argc,char *argv[])
          	if(popsize%2) popsize++;
          	//n_ind_a_enviar = (int) popsize * pind_env_rec;  //% de la subpoblación se envía
          	//n_ind_a_recibir = (int) popsize * pind_env_rec; //% de la subpoblación se recibe
-			n_ind_a_enviar = (int) popsize * pind_env;  //% de la subpoblación se envía
+                n_ind_a_enviar = (int) popsize * pind_env;  //% de la subpoblación se envía
          	n_ind_a_recibir = (int) popsize * pind_rec; //% de la subpoblación se recibe
          	//tasa_migracion = maxgen / workers; //tasa de migración debende de la cantidad de generaciones
                
@@ -432,28 +427,28 @@ int main(int argc,char *argv[])
 	              		//Establece comunicación sincrona con cada rank (AG)
 	              		comunicacion_sincrona_con_cada_rank();         
 	              
-				  	// Calcula cantidad de segundos que demoró en cada Algoritmo Genético
-				  	time_end = MPI_Wtime() - time_start;
-				  	time_consumation.elapsed_time = time_end;
-				  	time_consumation.comm_time = time_comm;
-				  	time_consumation.cpu_time = time_end - time_comm;
-				  	
-				  	//Graba datos en archivo de resultados del algoritmo
-					genera_resultados_algoritmo(run, tipo_problema, nomarch, &time_consumation);
-				
-					//Graba datos en archivo de resultados del problema
-					app_genera_resultados_problema(run, tipo_problema, nomarch);
-	
-				  	//IMPRIME SALIDA PARA PROGRAMA PARAMILS
-/*
-				  	printf("RunsExecuted = 1\n");
-				  	printf("CPUTime_Mean = %f\n", time_consumation.elapsed_time);
-				  	printf("BestSolution_Mean = %f\n", bestfit.fitness);
-*/
-                                        printf("Result for ParamILS: SAT, %f, %i, %f, %s\n", -1.0, -1, bestfit.fitness, argv[7]);
+                                // Calcula cantidad de segundos que demoró en cada Algoritmo Genético
+                                time_end = MPI_Wtime() - time_start;
+                                time_consumation.elapsed_time = time_end;
+                                time_consumation.comm_time = time_comm;
+                                time_consumation.cpu_time = time_end - time_comm;
 
-				  	//Genera la Salida hacia archivo de Resultados LAYOUT
-				  	app2_objfunc(tipo_problema, nomarch, bestfit, run);
+                                //Graba datos en archivo de resultados del algoritmo
+                                genera_resultados_algoritmo(run, tipo_problema, nomarch, &time_consumation);
+
+                                //Graba datos en archivo de resultados del problema
+                                app_genera_resultados_problema(run, tipo_problema, nomarch);
+
+                                //IMPRIME SALIDA PARA PROGRAMA PARAMILS
+/*
+                                printf("RunsExecuted = 1\n");
+                                printf("CPUTime_Mean = %f\n", time_consumation.elapsed_time);
+                                printf("BestSolution_Mean = %f\n", bestfit.fitness);
+*/
+                                printf("Result for ParamILS: SAT, %f, %i, %f, %s\n", -1.0, -1, bestfit.fitness, argv[7]);
+
+                                //Genera la Salida hacia archivo de Resultados LAYOUT
+                                app2_objfunc(tipo_problema, nomarch, bestfit, run);
 				  	
 	           		//Libera memoria del Coordinador
 	           		freeallMaster(coord_ind_a_rec, coord_ind_a_env, coord_ind_global);
