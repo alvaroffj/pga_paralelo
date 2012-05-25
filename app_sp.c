@@ -188,9 +188,7 @@ int app_leearchivo_sp(char *nombrearchivo, int rank_actual) {
 
     // Lee el numero de piezas y el ancho del strip
     fscanf(fp,"%d %d",&numero_piezas,&ancho);
-/*
     printf("Piezas: %d\nAncho: %d\n", numero_piezas, ancho);
-*/
     if(numero_piezas != 0) {
         //Se establece la memoria de la lista de piezas
         lista_piezas = (Datos_pieza *) malloc(numero_piezas * sizeof(Datos_pieza)); //La lista de piezas guarda cada estructura de pieza
