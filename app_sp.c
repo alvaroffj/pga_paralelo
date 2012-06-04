@@ -201,7 +201,8 @@ int app_leearchivo_sp(char *nombrearchivo, int rank_actual) {
     }
 
     // Lee el numero de piezas y el ancho del strip
-    fscanf(fp,"%d %d",&numero_piezas,&ancho);
+    fscanf(fp,"%d",&numero_piezas);
+    fscanf(fp,"%d",&ancho);
 /*
     printf("Piezas: %d\nAncho: %d\n", numero_piezas, ancho);
 */
