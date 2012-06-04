@@ -339,7 +339,7 @@ int main(int argc,char *argv[])
 			//fscanf(infp,"%d %s %d %s %d %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env_rec, &tasa_migracion, answer_mod_mig, &randomseed);
 //   			fscanf(infp,"%d %s %d %s %d %f %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env, &pind_rec, &tasa_migracion, answer_mod_mig, &randomseed);
             int i=0, s = 0;
-            s = atoi(argv[7]);
+            s = atoi(argv[8]);
             printf("s: %i\n", s);
             if(s==0) {
                 printf("interna\n");
