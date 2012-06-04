@@ -346,8 +346,9 @@ int main(int argc,char *argv[])
                     randomseed = nueva_semilla();
                 } while (randomseed == 0);
             } else {
-                randomseed = (float)((atoi(argv[7])%10000)/10000.0);
+                randomseed = (float)((s%10000)/10000.0);
             }
+            printf("seed: %f\n", randomseed);
             for(i=0; i<argc; i++) {
 //                printf("argv[%i]: %s\n", i, argv[i]);
                 if(strcmp(argv[i], "-pr")==0) tipo_problema = atoi(argv[++i]);
@@ -362,6 +363,7 @@ int main(int argc,char *argv[])
                 if(strcmp(argv[i], "-f")==0) sprintf(nomarch, "%s", argv[++i]);
                 if(strcmp(argv[i], "-a")==0) sprintf(answer, "%s", argv[++i]);
             }
+            
 //            exit(0);
          	
 			//Inicializa contador de segundos de comunicación 
