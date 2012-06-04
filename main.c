@@ -369,6 +369,7 @@ int main(int argc,char *argv[])
          	//Llena con información linea_in para ser enviada a cada Rank
          	//sprintf(linea_in,"%d %s %d %s %d %f %f %f %d %s %f\n", tipo_problema, nomarch, popsize, answer, maxgen, pcross, pmutation, pind_env_rec, tasa_migracion, answer_mod_mig, randomseed);
 			sprintf(linea_in,"%d %s %d %s %d %f %f %f %f %d %s %f", tipo_problema, nomarch, popsize, answer, maxgen, pcross, pmutation, pind_env, pind_rec, tasa_migracion, answer_mod_mig, randomseed);
+                        printf(linea_in,"%d %s %d %s %d %f %f %f %f %d %s %f\n", tipo_problema, nomarch, popsize, answer, maxgen, pcross, pmutation, pind_env, pind_rec, tasa_migracion, answer_mod_mig, randomseed);
 
        		#ifdef _PRINT_MIGRACION_
        			printf("Espere, MAPAPOC en Rank %d está enviando archivo %s a todos los rank...\n", rank, nomarch);
