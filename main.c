@@ -253,6 +253,7 @@ int main(int argc,char *argv[])
                                 gen = maxgen;
                             }
 */
+                            printf("%i.%i=>%f\n", rank, gen, bestfit.fitness);
                             // Avanza de Generación
                             temppop = oldpop;
                             oldpop = newpop;
