@@ -93,13 +93,13 @@ int main(int argc,char *argv[])
                 //Nueva semilla aleatoria
                 for(rank_seed = 1; rank_seed <= rank; rank_seed++) {
                     int s = 0;
-                    s = atoi(argv[8]);
+                    s = atoi(argv[7]);
                     if(s==0) {
                         do {
                             randomseed = nueva_semilla();
                         } while (randomseed == 0);
                     } else {
-                        randomseed = (float)((atoi(argv[8])%10000)/10000.0);
+                        randomseed = (float)((s%10000)/10000.0);
                     }
                 }//End for
                 #ifdef _PRINT_MIGRACION_
@@ -347,7 +347,7 @@ int main(int argc,char *argv[])
 			//fscanf(infp,"%d %s %d %s %d %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env_rec, &tasa_migracion, answer_mod_mig, &randomseed);
 //   			fscanf(infp,"%d %s %d %s %d %f %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env, &pind_rec, &tasa_migracion, answer_mod_mig, &randomseed);
             int i=0;
-            randomseed = (float)((atoi(argv[8])%10000)/10000.0);
+            randomseed = (float)((atoi(argv[7])%10000)/10000.0);
 /*
             printf("argv[8]: %i\n", atoi(argv[8]));
             printf("randomseed: %f\n", (float)((atoi(argv[8])%10000)/10000.0));
