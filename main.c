@@ -94,7 +94,7 @@ int main(int argc,char *argv[])
                 for(rank_seed = 1; rank_seed <= rank; rank_seed++) {
                     do {
 //               		randomseed = nueva_semilla();
-                        randomseed = (float)((atoi(argv[7])%10000)/10000.0);
+                        randomseed = (float)((atoi(argv[8])%10000)/10000.0);
                     }while(randomseed == 0);
                 }//End for
                 #ifdef _PRINT_MIGRACION_
