@@ -342,13 +342,15 @@ int main(int argc,char *argv[])
             s = atoi(argv[7]);
             printf("s: %i\n", s);
             if(s==0) {
+                printf("interna\n");
                 do {
                     randomseed = nueva_semilla();
                 } while (randomseed == 0);
             } else {
+                printf("argv\n");
                 randomseed = (float)((s%10000)/10000.0);
             }
-            printf("seed: %f\n", randomseed);
+            printf("seed: %d\n", randomseed);
             for(i=0; i<argc; i++) {
 //                printf("argv[%i]: %s\n", i, argv[i]);
                 if(strcmp(argv[i], "-pr")==0) tipo_problema = atoi(argv[++i]);
