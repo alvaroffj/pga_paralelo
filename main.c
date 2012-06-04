@@ -340,6 +340,7 @@ int main(int argc,char *argv[])
 //   			fscanf(infp,"%d %s %d %s %d %f %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env, &pind_rec, &tasa_migracion, answer_mod_mig, &randomseed);
             int i=0, s = 0;
             s = atoi(argv[7]);
+            printf("s: %i\n", s);
             if(s==0) {
                 do {
                     randomseed = nueva_semilla();
