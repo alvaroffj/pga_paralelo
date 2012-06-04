@@ -338,19 +338,10 @@ int main(int argc,char *argv[])
          	//OJO => Cada AG tendrá popsize/workers individuos => Población Total = popsize          	
 			//fscanf(infp,"%d %s %d %s %d %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env_rec, &tasa_migracion, answer_mod_mig, &randomseed);
 //   			fscanf(infp,"%d %s %d %s %d %f %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env, &pind_rec, &tasa_migracion, answer_mod_mig, &randomseed);
-            int i=0, s = 0;
-            s = atoi(argv[8]);
-            printf("s: %i\n", s);
-            if(s==0) {
-                printf("interna\n");
-                do {
-                    randomseed = nueva_semilla();
-                } while (randomseed == 0);
-            } else {
-                printf("argv\n");
-                randomseed = (float)((s%10000)/10000.0);
-            }
-            printf("seed: %d\n", randomseed);
+            int i=0;
+/*
+            randomseed = (float)((atoi(argv[8])%10000)/10000.0);
+*/
             for(i=0; i<argc; i++) {
 //                printf("argv[%i]: %s\n", i, argv[i]);
                 if(strcmp(argv[i], "-pr")==0) tipo_problema = atoi(argv[++i]);
@@ -365,7 +356,6 @@ int main(int argc,char *argv[])
                 if(strcmp(argv[i], "-f")==0) sprintf(nomarch, "%s", argv[++i]);
                 if(strcmp(argv[i], "-a")==0) sprintf(answer, "%s", argv[++i]);
             }
-            
 //            exit(0);
          	
 			//Inicializa contador de segundos de comunicación 
@@ -374,7 +364,6 @@ int main(int argc,char *argv[])
          	//Llena con información linea_in para ser enviada a cada Rank
          	//sprintf(linea_in,"%d %s %d %s %d %f %f %f %d %s %f\n", tipo_problema, nomarch, popsize, answer, maxgen, pcross, pmutation, pind_env_rec, tasa_migracion, answer_mod_mig, randomseed);
 			sprintf(linea_in,"%d %s %d %s %d %f %f %f %f %d %s %f", tipo_problema, nomarch, popsize, answer, maxgen, pcross, pmutation, pind_env, pind_rec, tasa_migracion, answer_mod_mig, randomseed);
-                        printf(linea_in,"%d %s %d %s %d %f %f %f %f %d %s %f\n", tipo_problema, nomarch, popsize, answer, maxgen, pcross, pmutation, pind_env, pind_rec, tasa_migracion, answer_mod_mig, randomseed);
 
        		#ifdef _PRINT_MIGRACION_
        			printf("Espere, MAPAPOC en Rank %d está enviando archivo %s a todos los rank...\n", rank, nomarch);
