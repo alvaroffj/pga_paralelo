@@ -195,7 +195,7 @@ void genera_resultados_algoritmo(int corrida, int tipo_problema, char *nombrearc
       	encabezado_resultado_algoritmo = 1;//Con ésto no imprime más el encabezado
 	}//End if 
 	//IMPRIME RESULTADOS DEL ALGORIMO GENÉTICO
-  	fprintf(ralgfp,"%d %d %s %f %f %f %d %d %f %f %d %d %d %d %s %d\n", 
+  	fprintf(ralgfp,"%d;%d;%s;%f;%f;%f;%d;%d;%f;%f;%d;%d;%d;%d;%s;%d\n", 
 	//CORRIDA;TIPO_PROBLEMA;ARCHIVO_PROBLEMA;TIEMPO_CPU;TIEMPO_IO;TIEMPO_TOTAL;MAXIMO_GENERACIONES;      			
   			corrida, tipo_problema, nombrearchivo, t->cpu_time, t->comm_time, t->elapsed_time, maxgen,
   	//TAMANO_POBLACION;PROBABILIDAD_CRUZAMIENTO;PROBABILIDAD_MUTACION;WORKER_MEJOR_INDIVIDUO;"

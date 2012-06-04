@@ -145,18 +145,20 @@ void inicializa_semilla(void)
    	r250_index = 0;
    
    	for (j = 0; j < 250; j++)
-      	r250_buffer[j] = randlcg();/* al parecer reseteo*/
+            r250_buffer[j] = randlcg();/* al parecer reseteo*/
+        
    	for (j = 0; j < 250; j++)
-      	if ( randlcg() > HALF_RANGE )
-         	r250_buffer[j] |= MSB;
+            if ( randlcg() > HALF_RANGE )
+                r250_buffer[j] |= MSB;
+        
    	msb = MSB;
    	mask = ALL_BITS;
    	for (j = 0; j < 32; j++) {
-      	k = STEP * j + 3;
-      	r250_buffer[k] &= mask;
-      	r250_buffer[k] |= msb;
-      	mask >>= 1;
-      	msb  >>= 1;
+            k = STEP * j + 3;
+            r250_buffer[k] &= mask;
+            r250_buffer[k] |= msb;
+            mask >>= 1;
+            msb  >>= 1;
    	}//End for
 }//End inicializa_semilla
 
@@ -167,15 +169,18 @@ float nueva_semilla(void)
    	float get_seed;
 
    	if ( r250_index >= 147 )
-      	j = r250_index - 147;
+            j = r250_index - 147;
    	else
-      	j = r250_index + 103;
+            j = r250_index + 103;
+        
    	new_rand = r250_buffer[ r250_index ] ^ r250_buffer[ j ];
    	r250_buffer[ r250_index ] = new_rand;
+        
    	if ( r250_index >= 249 )
-      	r250_index = 0;
+            r250_index = 0;
    	else
-      	r250_index++;
+            r250_index++;
+        
    	get_seed = (float)((float)new_rand / (float)ALL_BITS);
    	return get_seed;
 }//End nueva_semilla
