@@ -149,7 +149,7 @@ int inicializa_archivos(int argc,char *argv[], int rank)
         }//End if
     }//End if
 
-    sprintf(arch_evolucion,"%sevol-n%d.alg", ruta_resultados, rank); //Archivo con evolución del Algoritmo Genético por cada corrida 
+    sprintf(arch_evolucion,"%sevol-n%d.csv", ruta_resultados, rank); //Archivo con evolución del Algoritmo Genético por cada corrida 
     //Crea un nuevo archivo de evolución
     if ((evofp = fopen(arch_evolucion,"w")) == NULL) {
             fprintf(stderr,"\nNo se pudo crear archivo %s\n", arch_evolucion);
