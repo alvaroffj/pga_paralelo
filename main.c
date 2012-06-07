@@ -472,7 +472,10 @@ int main(int argc,char *argv[])
                                 printf("CPUTime_Mean = %f\n", time_consumation.elapsed_time);
                                 printf("BestSolution_Mean = %f\n", bestfit.fitness);
 */
+/*
                                 printf("Result for ParamILS: SAT, %f, %i, %f, %f\n", -1.0, -1, bestfit.fitness, randomseed);
+*/
+                                printf("Resultado: SAT, %f, %f, %f, %f\n", time_consumation.elapsed_time, time_consumation.cpu_time, bestfit.fitness, randomseed);
 
                                 //Genera la Salida hacia archivo de Resultados LAYOUT
                                 app2_objfunc(tipo_problema, nomarch, bestfit, run);
