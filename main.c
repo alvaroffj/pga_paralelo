@@ -367,7 +367,9 @@ int main(int argc,char *argv[])
                 if(strcmp(argv[i], "-pa")==0) pind_rec = atof(argv[++i]);
                 if(strcmp(argv[i], "-tm")==0) tasa_migracion = atoi(argv[++i]);
                 if(strcmp(argv[i], "-am")==0) sprintf(answer_mod_mig, "%s", argv[++i]);
+/*
                 if(strcmp(argv[i], "-f")==0) sprintf(nomarch, "%s", argv[++i]);
+*/
                 if(strcmp(argv[i], "-a")==0) sprintf(answer, "%s", argv[++i]);
             }
 //            exit(0);
