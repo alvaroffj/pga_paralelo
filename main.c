@@ -347,7 +347,7 @@ int main(int argc,char *argv[])
          	//Lee archivo en infp con parametros (todos ya chequeados)
          	//OJO => Cada AG tendrá popsize/workers individuos => Población Total = popsize          	
 			//fscanf(infp,"%d %s %d %s %d %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env_rec, &tasa_migracion, answer_mod_mig, &randomseed);
-//   			fscanf(infp,"%d %s %d %s %d %f %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env, &pind_rec, &tasa_migracion, answer_mod_mig, &randomseed);
+            fscanf(infp,"%d %s %d %s %d %f %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env, &pind_rec, &tasa_migracion, answer_mod_mig, &randomseed);
             int i=0;
 /*
             randomseed = (float)((atoi(argv[7])%10000)/10000.0);
@@ -475,7 +475,7 @@ int main(int argc,char *argv[])
 /*
                                 printf("Result for ParamILS: SAT, %f, %i, %f, %f\n", -1.0, -1, bestfit.fitness, randomseed);
 */
-                                printf("Resultado: SAT, %f, %f, %f, %f\n", time_consumation.elapsed_time, time_consumation.cpu_time, bestfit.fitness, randomseed);
+                                printf("Resultado: SAT, %s, %f, %f, %f, %f\n", nomarch, time_consumation.elapsed_time, time_consumation.cpu_time, bestfit.fitness, randomseed);
 
                                 //Genera la Salida hacia archivo de Resultados LAYOUT
                                 app2_objfunc(tipo_problema, nomarch, bestfit, run);
