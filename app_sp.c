@@ -90,7 +90,7 @@ float fitness() {
 /*
  * Inserta las piezas en la tira, según el orden y sentido correspondiente
  */
-void creaLayout() {
+void creaLayout(int write) {
     int i, x = 0, j, altura = 0, n = 1, fit = 0, cAncho = 0, cAlto = 0, pen = 0;
     Datos_pieza cPieza;
 
@@ -99,6 +99,9 @@ void creaLayout() {
     }
     for(i=0; i<numero_piezas; i++) {
         arreglo_ocupado[i] = 0;
+    }
+    if(write==1) {
+        fprintf(outfp, "Piezas: ");
     }
     for(i=0; i<numero_piezas; i++) {
         x = posMenorAltura();
@@ -139,35 +142,20 @@ void creaLayout() {
             }
         }
         
-/*
-        printf("insertar pieza[%d]: %d x %d en (%d,%d)\n", arreglo_orden[i], cAncho, cAlto, x, altura);
-*/
+        if(write==1) {
+            fprintf(outfp, "%d,%d,%d,%d;", x, altura, cAncho, cAlto);
+        }
         for(j=x; j<cAncho+x; j++) {
             arreglo_alturas[j] = altura + cAlto;
         }
-/*
-        printf("arreglo_altura: ");
-        for(j=0; j<ancho; j++) {
-            printf("%d ", arreglo_alturas[j]);
-        }
-        printf("\n");
-*/
     }
-/*
-    printf("arreglo_altura: ");
-    for(j=0; j<ancho; j++) {
-        printf("%d ", arreglo_alturas[j]);
-    }
-    printf("\n");
-*/
-    
-    if(pen>0) {
-/*
-        printf("pen: %i\n", pen);
-*/
+    if(write==1) {
+        fprintf(outfp, "\n");
+        fprintf(outfp, "arreglo_altura: ");
         for(j=0; j<ancho; j++) {
-            arreglo_alturas[j] = arreglo_alturas[j] + 10*pen;
+            fprintf(outfp, "%d ", arreglo_alturas[j]);
         }
+        fprintf(outfp, "\n");
     }
 }
 
@@ -396,6 +384,148 @@ void app_objfunc_sp(struct individual *critter) {
 /*
     printf("=> %d %f\n", fitness(), (float)(mayorAltura()*ancho)-area_total);
 */
+}
+
+void app_objfuncfinal_sp(struct bestever *critter) {
+    unsigned mask = 1, tp, rt, bitpos, salto, dir, b, m, go = 1;
+    int i, j, stop, pPend = numero_piezas, pIni = 0, ini, valPos, nAsig = 0, vueltas = 0;
+    int chrom[numero_piezas];
+    
+    for(i=0; i<numero_piezas; i++) {
+        arreglo_orden[i] = -1;
+        arreglo_ocupado[i] = 0;
+        chrom[i] = 0;
+        arreglo_rotar[i] = 0;
+    }
+    
+/*
+    printf("app_objfunc_sp\n");
+    printf("largo_cromosoma: %d\n", largo_cromosoma);
+    printf("Cromosoma: ");
+*/
+    for (i = 0; i < chromsize; i++) {
+        if (i == (chromsize - 1)) //ultimo bloque
+            stop = lchrom - (i * UINTSIZE);
+        else
+            stop = UINTSIZE;
+        
+        tp = critter->chrom[i];
+        rt = critter->chmut[i];
+        for (j = 0; j < stop; j++) {
+            bitpos = j + UINTSIZE*i;
+            if((i==0 && j >=bit_reservados) || i>0) {
+                /*
+                * Extrae segmento del cromosoma correspondiente a las piezas
+                */
+                if (tp & mask) chrom[bitpos - bit_reservados] = 1;
+                else chrom[bitpos - bit_reservados] = 0;
+
+                /*
+                * Extrae segmento del cromosoma correspondiente a la orientacion de la pieza
+                */
+                if (rt & mask) arreglo_rotar[bitpos - bit_reservados] = 1; //Rotada
+                else arreglo_rotar[bitpos - bit_reservados] = 0; //No rotada
+            }
+            tp = tp >> 1;
+            rt = rt >> 1;
+        }
+    }
+/*
+    printf("\n");
+*/
+    tp = critter->chrom[0];
+    /*
+     * ini: Valor que se considera primero, 0 o 1, al recorrer el cromosoma
+     */
+    ini = (tp & mask)?1:0;
+    tp = tp >> 1;
+    /*
+     * dir: Direccion inicial en que se recorre el cromosoma
+     * 0: der -> izq
+     * 1: izq -> der
+     */
+    dir = (tp & mask)?1:0; 
+    salto = 1;
+    
+    //Obtiene el valor del salto para recorrer el cromosoma
+    for(i=0; i<3; i++) {
+        tp = tp >> 1;
+        for(b = 1, m = 2; m > i; m--) { b *= 2;}
+        if(tp & mask) salto = salto + b;
+    }
+    
+    fprintf(outfp, "Mejor resultado\n");
+    fprintf(outfp, "Corrida: %d\n", run);
+    fprintf(outfp, "Instancia: %s\n", nomarch);
+    fprintf(outfp, "Fitness: %f\n", critter->fitness);
+    fprintf(outfp, "ini: %d\n", ini);
+    fprintf(outfp, "dir: %d\n", dir);
+    fprintf(outfp, "salto: %d\n", salto);
+    fprintf(outfp, "chrom: ");
+    for(i=0; i<numero_piezas; i++) {
+        fprintf(outfp, "%d ", chrom[i]);
+    }
+    fprintf(outfp, "\n");
+    
+    /*
+     * Obtiene el orden en que deben ser insertadas las piezas según el cromosoma
+     * orden[]: arreglo donde se almacena el id de las piezas
+     */
+    vueltas = 0;
+    while(go) {
+        if(dir) {
+            pIni = 0;
+            while(arreglo_ocupado[pIni] != 0) {
+                pIni++;
+            }
+            for(i=pIni; i<numero_piezas; i = i+salto) {
+                if(arreglo_ocupado[i] == 0) {
+                    valPos = chrom[i];
+                    if(valPos==ini) {
+                        arreglo_ocupado[i] = 1;
+                        arreglo_orden[nAsig] = i;
+                        nAsig++;
+                    }
+                    if(nAsig == numero_piezas) go = 0;
+                }
+            }
+        } else {
+            pIni = numero_piezas-1;
+            while(arreglo_ocupado[pIni] != 0) {
+                pIni--;
+            }
+            for(i=pIni; i>=0; i = i-salto) {
+                if(arreglo_ocupado[i] == 0) {
+                    valPos = chrom[i];
+                    if(valPos==ini) {
+                        arreglo_ocupado[i] = 1;
+                        arreglo_orden[nAsig] = i;
+                        nAsig++;
+                    }
+                    if(nAsig == numero_piezas) go = 0;
+                }
+            }
+        }
+        vueltas++;
+        
+        dir = (dir==0)?1:0;
+        if(vueltas%2 == 0) ini = (ini==0)?1:0;
+    }
+    
+    
+    fprintf(outfp, "O: ");
+    for(i=0; i<numero_piezas; i++) {
+        fprintf(outfp, "%d ", arreglo_orden[i]);
+    }
+    fprintf(outfp, "\n");
+    
+    fprintf(outfp, "R: ");
+    for(i=0; i<numero_piezas; i++) {
+        fprintf(outfp, "%d ", arreglo_rotar[arreglo_orden[i]]);
+    }
+    fprintf(outfp, "\n");
+    creaLayout(1);
+    fprintf(outfp, "--------------------------------------------------------------------------------------------\n");
 }
 
 

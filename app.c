@@ -35,6 +35,16 @@ void app_objfunc(int tipo_problema, struct individual *critter) {
     else if (tipo_problema == 1) app_objfunc_sp(critter);
 }
 
+void app_objfuncfinal(int tipo_problema, struct individual *critter) {
+    //Problema de Corte de Pieza Guillotina
+/*
+    if (tipo_problema == 0) app_objfuncfinal_g(critter);
+    //Problema de Strip Packing
+    else 
+*/
+        if (tipo_problema == 1) app_objfuncfinal_sp(critter);
+}
+
 /*
  * Función que libera variables del problema
  */
