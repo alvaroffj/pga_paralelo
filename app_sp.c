@@ -373,7 +373,7 @@ void app_objfunc_sp(struct individual *critter) {
         printf("%d ", arreglo_orden[i]);
     }
 */
-    creaLayout();
+    creaLayout(0);
     TEval PEval;
     PEval.perdida = (float)(mayorAltura()*ancho)-area_total;
     critter->PEval = PEval;
