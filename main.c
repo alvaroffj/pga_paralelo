@@ -478,7 +478,7 @@ int main(int argc,char *argv[])
                                 printf("Resultado: SAT, %s, %f, %f, %f, %f\n", nomarch, time_consumation.elapsed_time, time_consumation.cpu_time, bestfit.fitness, randomseed);
 
                                 //Genera la Salida hacia archivo de Resultados LAYOUT
-                                app_objfuncfinal(tipo_problema, bestfit);
+                                app_objfuncfinal(tipo_problema, &(bestfit));
 				  	
 	           		//Libera memoria del Coordinador
 	           		freeallMaster(coord_ind_a_rec, coord_ind_a_env, coord_ind_global);
