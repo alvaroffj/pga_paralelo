@@ -349,12 +349,11 @@ int main(int argc,char *argv[])
 			//fscanf(infp,"%d %s %d %s %d %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env_rec, &tasa_migracion, answer_mod_mig, &randomseed);
             fscanf(infp,"%d %s %d %s %d %f %f %f %f %d %s %f", &tipo_problema, nomarch, &popsize, answer, &maxgen, &pcross, &pmutation, &pind_env, &pind_rec, &tasa_migracion, answer_mod_mig, &randomseed);
             int i=0;
+            randomseed = (float)((atoi(argv[7])%100)/100.0);
+            
 /*
-            randomseed = (float)((atoi(argv[7])%10000)/10000.0);
-*/
-/*
-            printf("argv[8]: %i\n", atoi(argv[8]));
-            printf("randomseed: %f\n", (float)((atoi(argv[8])%10000)/10000.0));
+            printf("argv[7]: %i\n", atoi(argv[7]));
+            printf("randomseed: %f\n", randomseed);
 */
             for(i=0; i<argc; i++) {
 //                printf("argv[%i]: %s\n", i, argv[i]);
@@ -395,6 +394,9 @@ int main(int argc,char *argv[])
       
          	//Setea variables dependiendo de la cantidad de workers 
          	popsize = popsize / workers;
+/*
+                printf("popsize: %i\n", popsize);
+*/
          	if(popsize%2) popsize++;
          	//n_ind_a_enviar = (int) popsize * pind_env_rec;  //% de la subpoblación se envía
          	//n_ind_a_recibir = (int) popsize * pind_env_rec; //% de la subpoblación se recibe
@@ -473,7 +475,7 @@ int main(int argc,char *argv[])
                                 printf("BestSolution_Mean = %f\n", bestfit.fitness);
 */
 /*
-                                printf("Result for ParamILS: SAT, %f, %i, %f, %f\n", -1.0, -1, bestfit.fitness, randomseed);
+                                printf("Result for ParamILS: SAT, %f, %i, %f, %s\n", -1.0, -1, bestfit.fitness, argv[7]);
 */
                                 printf("Resultado: SAT, %s, %f, %f, %f, %f\n", nomarch, time_consumation.elapsed_time, time_consumation.cpu_time, bestfit.fitness, randomseed);
 

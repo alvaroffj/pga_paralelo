@@ -44,7 +44,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/rselect.o \
 	${OBJECTDIR}/comunica.o \
 	${OBJECTDIR}/generate.o \
+	${OBJECTDIR}/app_cp.o \
 	${OBJECTDIR}/statistic.o \
+	${OBJECTDIR}/app2_g.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/app.o \
 	${OBJECTDIR}/operators.o \
@@ -125,10 +127,20 @@ ${OBJECTDIR}/generate.o: generate.c
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/generate.o generate.c
 
+${OBJECTDIR}/app_cp.o: app_cp.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/app_cp.o app_cp.c
+
 ${OBJECTDIR}/statistic.o: statistic.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/statistic.o statistic.c
+
+${OBJECTDIR}/app2_g.o: app2_g.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/app2_g.o app2_g.c
 
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}

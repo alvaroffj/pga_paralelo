@@ -236,24 +236,27 @@ int crossover (unsigned *parent1,unsigned *parent2,unsigned *child1,unsigned *ch
 	      	jcross = rnd(1 ,(lchrom - 1));// Cruzamiento entre 1 y l-1
 			//jcross = (int) ceil((float) lchrom/ 2.0);// GMO
 			ncross++;
+/*
+                printf("rank: %i, lchrom: %i, chromsize: %i, chmutsize: %i, jcross: %i, uintsize: %i\n", rank, lchrom, chromsize, chmutsize, jcross, UINTSIZE);
+*/
 	      	for(k = 1; k <= chromsize; k++) {
 	         	if(jcross >= (k*UINTSIZE)) {
-	            	child1[k-1] = parent1[k-1];
-	            	child2[k-1] = parent2[k-1];
+                            child1[k-1] = parent1[k-1];
+                            child2[k-1] = parent2[k-1];
 	         	}//end if
 	         	else if((jcross < (k*UINTSIZE)) && (jcross > ((k-1)*UINTSIZE))) {
-	            	mask = 1;
-	            	for(j = 1; j <= (jcross-1-((k-1)*UINTSIZE)); j++) {
-	            		temp = 1;
-	               		mask = mask<<1;
-	               		mask = mask|temp;
-	            	}//End for
-	            	child1[k-1] = (parent1[k-1]&mask)|(parent2[k-1]&(~mask));
-	            	child2[k-1] = (parent1[k-1]&(~mask))|(parent2[k-1]&mask);
+                            mask = 1;
+                            for(j = 1; j <= (jcross-1-((k-1)*UINTSIZE)); j++) {
+                                temp = 1;
+                                mask = mask<<1;
+                                mask = mask|temp;
+                            }//End for
+                            child1[k-1] = (parent1[k-1]&mask)|(parent2[k-1]&(~mask));
+                            child2[k-1] = (parent1[k-1]&(~mask))|(parent2[k-1]&mask);
 	         	}//End else if
 	         	else {
-	            	child1[k-1] = parent2[k-1];
-	            	child2[k-1] = parent1[k-1];
+                            child1[k-1] = parent2[k-1];
+                            child2[k-1] = parent1[k-1];
 	         	}//End else
 	      	}//End for
 	
